@@ -520,6 +520,18 @@
             <artifactId>milyn-smooks-all</artifactId>
         </dependency>
 
+        <!-- Cell-Life reporting framework -->
+
+        <dependency>
+            <groupId>org.celllife.report</groupId>
+            <artifactId>celllife-report-reporting</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.celllife.report</groupId>
+            <artifactId>celllife-report-pconfig</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>
