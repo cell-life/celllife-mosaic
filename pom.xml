@@ -18,6 +18,7 @@
         <spring.version>3.2.1.RELEASE</spring.version>
         <spring-integration.version>2.2.1.RELEASE</spring-integration.version>
         <spring-security.version>3.1.0.RELEASE</spring-security.version>
+        <jasperreports.version>4.0.1</jasperreports.version>
     </properties>
 
     <build>
@@ -471,6 +472,8 @@
                     </exclusion>
                 </exclusions>
             </dependency>
+            
+            <!-- Cell-Life reporting framework -->
 
             <dependency>
                 <groupId>org.celllife.report</groupId>
@@ -478,11 +481,28 @@
                 <version>1.0.0-SNAPSHOT</version>
             </dependency>
 
-            <dependency>
+			<dependency>
                 <groupId>org.celllife.report</groupId>
                 <artifactId>celllife-report-reporting</artifactId>
                 <version>1.0.0-SNAPSHOT</version>
             </dependency>
+
+			<!-- Jasper -->
+	        <dependency>
+	            <groupId>net.sf.jasperreports</groupId>
+	            <artifactId>jasperreports</artifactId>
+	            <version>${jasperreports.version}</version>
+	            <exclusions>
+	                <exclusion>
+	                    <groupId>commons-logging</groupId>
+	                    <artifactId>commons-logging</artifactId>
+	                </exclusion>
+	                <exclusion>
+	                    <groupId>eclipse</groupId>
+	                    <artifactId>jdtcore</artifactId>
+	                </exclusion>
+	            </exclusions>
+	        </dependency>
 
         </dependencies>
 
