@@ -1,5 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"  %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -31,13 +31,12 @@
 
     <hr>
 
-    <h1>Reports</h1>
+    <h3>Reports</h3>
 
     <p>
-    <ul>
-        <li>Future Report Here</li>
-        <li>Future Report Here</li>
-    </ul>
+        <c:forEach items="${reports}" var="report">
+            <p>${report.title}</p>
+        </c:forEach>
     </p>
 
     <hr>

@@ -17,14 +17,13 @@ import org.springframework.context.annotation.ImportResource;
         "classpath:/META-INF/spring/spring-domain.xml",
         "classpath:/META-INF/spring/spring-dozer.xml",
         "classpath:/META-INF/spring/spring-smooks.xml",
-        "classpath:/META-INF/spring/spring-integration-cqm.xml",
-        "classpath:/META-INF/spring/spring-integration-dhis.xml",
         "classpath:/META-INF/spring/spring-jdbc.xml",
         "classpath:/META-INF/spring/spring-json.xml",
         "classpath:/META-INF/spring/spring-orm.xml",
         "classpath:/META-INF/spring/spring-task.xml",
         "classpath:/META-INF/spring/spring-tx.xml",
-        "classpath:/META-INF/spring-data/spring-data-jpa.xml"
+        "classpath:/META-INF/spring-data/spring-data-jpa.xml",
+        "classpath:/META-INF/spring/spring-reports.xml"
 })
 public class TestConfiguration {
 }

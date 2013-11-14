@@ -492,7 +492,6 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <scope>test</scope>
         </dependency>
 
         <!-- Groovy -->
@@ -518,6 +517,16 @@
         <dependency>
             <groupId>org.milyn</groupId>
             <artifactId>milyn-smooks-all</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.celllife.report</groupId>
+            <artifactId>celllife-report-pconfig</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.celllife.report</groupId>
+            <artifactId>celllife-report-reporting</artifactId>
         </dependency>
 
     </dependencies>
