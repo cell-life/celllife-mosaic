@@ -9,11 +9,17 @@
     <title>TITLE</title>
 
     <c:set var="url">${pageContext.request.requestURL}</c:set>
-    <base href="${fn:substring(url, 0, fn:length(url) - fn:length(pageContext.request.requestURI))}${pageContext.request.contextPath}/" />
+    <base href="${fn:substring(url, 0, fn:length(url) - fn:length(pageContext.request.requestURI))}${pageContext.request.contextPath}/"/>
 
-    <link href="resources/css/bootstrap-3.0.0.min.css" rel="stylesheet" media="screen">
-    <link href="resources/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="resources/css/bootstrap-3.0.2.css" rel="stylesheet" media="screen">
+    <link href="resources/css/bootstrap-theme-3.0.2.css" rel="stylesheet">
+
+    <script type="text/javascript" src="resources/js/jquery-1.8.2.js"></script>
+    <script type="text/javascript" src="resources/js/jquery-ui-1.9.1.min.js"></script>
+    <script type="text/javascript" src="resources/js/bootstrap-3.0.2.js"></script>
+
 </head>
+
 <body>
 
 <div class="container">
@@ -25,19 +31,32 @@
             <li><a href="#">Contact</a></li>
             <li><a href="j_spring_cas_security_logout">Logout</a>
         </ul>
-         <h2><img src="resources/img/logo.png"></h2>
-        <h3 class="muted">HEADING</h3>
+        <h2><img src="resources/img/logo.png"></h2>
+
+        <h3 class="muted">MOSAIC DASHBOARD</h3>
     </div>
 
     <hr>
 
-    <h3>Reports</h3>
+    <h3>Click on a Report</h3>
+    <br>
 
-    <p>
-        <c:forEach items="${reports}" var="report">
-            <p>${report.title}</p>
-        </c:forEach>
-    </p>
+    <div class="row">
+
+        <div class="col-md-4">
+
+            <c:forEach items="${reports}" var="report">
+                <a href="#${report.id}" class="active reportLink">
+                    <h4>${report.label}</h4>
+                </a>
+            </c:forEach>
+
+        </div>
+
+        <div class="col-md-8 form">
+
+        </div>
+    </div>
 
     <hr>
 
@@ -46,6 +65,29 @@
     </div>
 
 </div>
+
+<script>
+    $( document ).ready(function() {
+
+        $(".reportLink").click(function () {
+            var reportId = $(this).attr('href') + '';
+            reportId = reportId.replace('#','');
+
+            $.get(
+                    "service/getHtml",
+                    {reportId : reportId},
+                    function(data) {
+                        $(".form").html("<form role=\"form\"><div class=\"form-horizontal\">" + data + "</div></form>");
+                    }
+            );
+
+        });
+
+    });
+
+
+
+</script>
 
 </body>
 </html>

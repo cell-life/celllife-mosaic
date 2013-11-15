@@ -9,7 +9,7 @@
         <property name="dataSource" ref="dataSource" />
         <property name="generatedReportFolder" value="${MOSAIC_HOME}/reports/generated"/>
         <property name="scheduledReportFolder" value="${MOSAIC_HOME}/reports/scheduled"/>
-        <property name="sourceReportFolder" value="${MOSAIC_HOME}/reports/source"/>
+        <property name="sourceReportFolder" value="classpath:reports"/>
         <property name="reportLoader">
             <bean class="org.celllife.reporting.service.impl.SpringResourceLoader"/>
         </property>
