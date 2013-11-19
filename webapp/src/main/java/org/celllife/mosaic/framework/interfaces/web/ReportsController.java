@@ -44,7 +44,7 @@ public class ReportsController {
         } catch (Exception e) {
             return "No such Report.";
         }
-        String htmlString = pconfigParameterHtmlService.createHtmlFieldsFromPconfig(pconfig);
+        String htmlString = pconfigParameterHtmlService.createHtmlFieldsFromPconfig(pconfig,"submitButton");
         return htmlString;
     }
 

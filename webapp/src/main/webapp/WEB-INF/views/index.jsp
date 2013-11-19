@@ -77,7 +77,7 @@
                     "service/getHtml",
                     {reportId : reportId},
                     function(data) {
-                        $(".form").html("<form role=\"form\"><div class=\"form-horizontal\">" + data + "</div></form>");
+                        $(".form").html(data);
                     }
             );
 
