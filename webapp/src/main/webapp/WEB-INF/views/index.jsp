@@ -67,24 +67,28 @@
 </div>
 
 <script>
-    $( document ).ready(function() {
+    $(document).ready(function () {
 
         $(".reportLink").click(function () {
             var reportId = $(this).attr('href') + '';
-            reportId = reportId.replace('#','');
+            reportId = reportId.replace('#', '');
 
             $.get(
                     "service/getHtml",
-                    {reportId : reportId},
-                    function(data) {
+                    {reportId: reportId},
+                    function (data) {
                         $(".form").html(data);
+
+                        $(".form").on('submit', function (e) {
+                            e.preventDefault();
+                            window.location = "service/pdfReport" + "?reportId=" + reportId + "&" + $("form").serialize();
+                        });
                     }
             );
 
         });
 
     });
-
 
 
 </script>

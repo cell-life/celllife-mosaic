@@ -14,6 +14,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.Collection;
 
 @Controller
@@ -24,7 +29,7 @@ public class ReportsController {
 
     private PconfigParameterHtmlService pconfigParameterHtmlService = new PconfigParameterHtmlServiceImpl();
 
-    private static Logger log = LoggerFactory.getLogger(ReportsController .class);
+    private static Logger log = LoggerFactory.getLogger(ReportsController.class);
 
     @ResponseBody
     @RequestMapping(
@@ -44,8 +49,45 @@ public class ReportsController {
         } catch (Exception e) {
             return "No such Report.";
         }
-        String htmlString = pconfigParameterHtmlService.createHtmlFieldsFromPconfig(pconfig,"submitButton");
+        String htmlString = pconfigParameterHtmlService.createHtmlFieldsFromPconfig(pconfig, "submitButton");
         return htmlString;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/service/pdfReport", method = RequestMethod.GET, produces = "application/pdf")
+    public void getPdfReport(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        System.out.println("Request Received. " + request.getParameterMap().toString());
+
+        String reportId = request.getParameter("reportId");
+        if (reportId.isEmpty()) {
+            throw new RuntimeException("Could not retrieve this report.");
+        } else {
+
+            Pconfig pconfig = reportService.getReportByName(reportId);
+            Pconfig returnedPconfig = pconfigParameterHtmlService.createPconfigFromHtmlFormSubmission(request.getParameterNames(), request.getParameterMap(), pconfig);
+
+            //String generatedReport = reportService.generateReport(pconfig);
+
+            response.setContentType("application/pdf");
+            response.setHeader("Content-Disposition", "attachment; filename=\"report.pdf\"");
+            OutputStreamWriter out = null;
+            try {
+                out = new OutputStreamWriter(new BufferedOutputStream(response.getOutputStream()));
+                out.write("Hello");
+            } catch (IOException e) {
+                throw new RuntimeException("Could not create PDF.", e);
+            } finally {
+                try {
+                    if (out != null) {
+                        out.flush();
+                        out.close();
+                    }
+                } catch (IOException e) {
+                    log.warn("Ignoring IOException thrown when trying to close and flush the OutputStream.", e.getMessage());
+                }
+            }
+        }
     }
 
 }
