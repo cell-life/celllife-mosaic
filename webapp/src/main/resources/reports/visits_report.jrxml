@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="visits_report" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="620"/>
+	<property name="ireport.y" value="0"/>
 	<template><![CDATA[$P{SUBREPORT_DIR} + "report_style_template.jrtx"]]></template>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
@@ -45,10 +45,10 @@
  count(pep_info_adherence.id) as 'pep_info_adherence', -- PEP Information and Adherence
  count(thuthuzela_info.id) as 'thuthuzela_info', -- Thuthuzela Care Centre process information
 
- count(pp_mencarep.id) as 'prog_provided_mencarep', -- Mencare+
+ count(pp_mencarep.id) as 'prog_provided_mencarep', -- Mencare
  count(men_counselling.id) as 'men_counselling', -- Counselling
  count(group_education.id) as 'group_education', -- Group education with young men on SRHR, gender equality and caregiving
- count(comm_campaigns.id) as 'comm_campaigns' -- Community campaigns/awareness on mencare+
+ count(comm_campaigns.id) as 'comm_campaigns' -- Community campaigns/awareness on mencare
 
 FROM mosaic_visit_form_v1 mvf1
 
@@ -106,9 +106,9 @@ FROM mosaic_visit_form_v1 mvf1
       (SELECT id from mosaic_visit_form_v1 where SexualServ like '%SexualServHct%') as SexualServHct
       ON SexualServHct.id = mvf1.id
 
--- sexual health
+-- sexual violence
     LEFT JOIN
-      (SELECT id from mosaic_visit_form_v1 where ProgProvided like '%SV_prod%') as pp_sexual_violence
+      (SELECT id from mosaic_visit_form_v1 where ProgProvided like '%SV_prog%') as pp_sexual_violence
       ON pp_sexual_violence.id = mvf1.id
     LEFT JOIN
       (SELECT id from mosaic_visit_form_v1 where SexualViolenceServ like '%containment_couns_SV%') as containment_couns_SV
@@ -124,7 +124,7 @@ FROM mosaic_visit_form_v1 mvf1
       ON thuthuzela_info.id = mvf1.id
 
 
--- mencare+
+-- mencare
     LEFT JOIN
       (SELECT id from mosaic_visit_form_v1 where ProgProvided like '%mencare_prog%') as pp_mencarep
       ON pp_mencarep.id = mvf1.id
@@ -291,7 +291,7 @@ $P{male}.equals(true)? ",'male'" : ""
 	</columnHeader>
 	<detail>
 		<band height="438" splitType="Stretch">
-			<textField>
+			<staticText>
 				<reportElement x="42" y="0" width="331" height="20"/>
 				<box leftPadding="0" rightPadding="0">
 					<pen lineWidth="0.0"/>
@@ -303,8 +303,8 @@ $P{male}.equals(true)? ",'male'" : ""
 				<textElement verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[Court Services]]></textFieldExpression>
-			</textField>
+				<text><![CDATA[Court Services]]></text>
+			</staticText>
 			<textField isBlankWhenNull="true">
 				<reportElement x="372" y="0" width="80" height="20"/>
 				<box leftPadding="5" rightPadding="5">
@@ -319,7 +319,7 @@ $P{male}.equals(true)? ",'male'" : ""
 				</textElement>
 				<textFieldExpression><![CDATA[$F{prog_provided_court}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<staticText>
 				<reportElement x="42" y="20" width="331" height="12"/>
 				<box leftPadding="0" rightPadding="0">
 					<pen lineWidth="0.0"/>
@@ -331,8 +331,8 @@ $P{male}.equals(true)? ",'male'" : ""
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[Containment Counselling]]></textFieldExpression>
-			</textField>
+				<text><![CDATA[Containment Counselling]]></text>
+			</staticText>
 			<textField isBlankWhenNull="true">
 				<reportElement x="372" y="20" width="80" height="12"/>
 				<box leftPadding="5" rightPadding="5">
@@ -347,7 +347,7 @@ $P{male}.equals(true)? ",'male'" : ""
 				</textElement>
 				<textFieldExpression><![CDATA[$F{cont_counselling}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<staticText>
 				<reportElement x="42" y="32" width="331" height="12"/>
 				<box leftPadding="0" rightPadding="0">
 					<pen lineWidth="0.0"/>
@@ -359,8 +359,8 @@ $P{male}.equals(true)? ",'male'" : ""
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[Education and information on domestic violence and abuse]]></textFieldExpression>
-			</textField>
+				<text><![CDATA[Education and information on domestic violence and abuse]]></text>
+			</staticText>
 			<textField isBlankWhenNull="true">
 				<reportElement x="372" y="32" width="80" height="12"/>
 				<box leftPadding="5" rightPadding="5">
@@ -375,7 +375,7 @@ $P{male}.equals(true)? ",'male'" : ""
 				</textElement>
 				<textFieldExpression><![CDATA[$F{education_DVA}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<staticText>
 				<reportElement x="42" y="44" width="331" height="12"/>
 				<box leftPadding="0" rightPadding="0">
 					<pen lineWidth="0.0"/>
@@ -387,8 +387,8 @@ $P{male}.equals(true)? ",'male'" : ""
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[Information about Court Processes and Procedures]]></textFieldExpression>
-			</textField>
+				<text><![CDATA[Information about Court Processes and Procedures]]></text>
+			</staticText>
 			<textField isBlankWhenNull="true">
 				<reportElement x="372" y="44" width="80" height="12"/>
 				<box leftPadding="5" rightPadding="5">
@@ -403,7 +403,7 @@ $P{male}.equals(true)? ",'male'" : ""
 				</textElement>
 				<textFieldExpression><![CDATA[$F{info_court_proc}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<staticText>
 				<reportElement x="42" y="56" width="331" height="12"/>
 				<box leftPadding="0" rightPadding="0">
 					<pen lineWidth="0.0"/>
@@ -415,8 +415,8 @@ $P{male}.equals(true)? ",'male'" : ""
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[Referrals to other Service Providers as needed]]></textFieldExpression>
-			</textField>
+				<text><![CDATA[Referrals to other Service Providers as needed]]></text>
+			</staticText>
 			<textField isBlankWhenNull="true">
 				<reportElement x="372" y="56" width="80" height="12"/>
 				<box leftPadding="5" rightPadding="5">
@@ -431,7 +431,7 @@ $P{male}.equals(true)? ",'male'" : ""
 				</textElement>
 				<textFieldExpression><![CDATA[$F{referrals_SP}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<staticText>
 				<reportElement x="42" y="68" width="331" height="12"/>
 				<box leftPadding="0" rightPadding="0">
 					<pen lineWidth="0.0"/>
@@ -443,8 +443,8 @@ $P{male}.equals(true)? ",'male'" : ""
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[Information on Sexual Reproductive Health]]></textFieldExpression>
-			</textField>
+				<text><![CDATA[Information on Sexual Reproductive Health]]></text>
+			</staticText>
 			<textField isBlankWhenNull="true">
 				<reportElement x="372" y="68" width="80" height="12"/>
 				<box leftPadding="5" rightPadding="5">
@@ -459,7 +459,7 @@ $P{male}.equals(true)? ",'male'" : ""
 				</textElement>
 				<textFieldExpression><![CDATA[$F{info_SRH}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<staticText>
 				<reportElement x="42" y="80" width="331" height="12"/>
 				<box leftPadding="0" rightPadding="0">
 					<pen lineWidth="0.0"/>
@@ -471,8 +471,8 @@ $P{male}.equals(true)? ",'male'" : ""
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[Information on HIV and where to be tested]]></textFieldExpression>
-			</textField>
+				<text><![CDATA[Information on HIV and where to be tested]]></text>
+			</staticText>
 			<textField isBlankWhenNull="true">
 				<reportElement x="372" y="80" width="80" height="12"/>
 				<box leftPadding="5" rightPadding="5">
@@ -501,7 +501,7 @@ $P{male}.equals(true)? ",'male'" : ""
 				</textElement>
 				<text><![CDATA[]]></text>
 			</staticText>
-			<textField>
+			<staticText>
 				<reportElement x="42" y="182" width="331" height="12"/>
 				<box leftPadding="0" rightPadding="0">
 					<pen lineWidth="0.0"/>
@@ -513,9 +513,9 @@ $P{male}.equals(true)? ",'male'" : ""
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[Educational Support Groups]]></textFieldExpression>
-			</textField>
-			<textField>
+				<text><![CDATA[Educational Support Groups]]></text>
+			</staticText>
+			<staticText>
 				<reportElement x="42" y="170" width="331" height="12"/>
 				<box leftPadding="0" rightPadding="0">
 					<pen lineWidth="0.0"/>
@@ -527,8 +527,8 @@ $P{male}.equals(true)? ",'male'" : ""
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[Educational workshops]]></textFieldExpression>
-			</textField>
+				<text><![CDATA[Educational workshops]]></text>
+			</staticText>
 			<textField isBlankWhenNull="true">
 				<reportElement x="372" y="100" width="80" height="20"/>
 				<box leftPadding="5" rightPadding="5">
@@ -543,7 +543,7 @@ $P{male}.equals(true)? ",'male'" : ""
 				</textElement>
 				<textFieldExpression><![CDATA[$F{prog_provided_social_services}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<staticText>
 				<reportElement x="42" y="144" width="331" height="27"/>
 				<box leftPadding="0" rightPadding="0">
 					<pen lineWidth="0.0"/>
@@ -555,9 +555,9 @@ $P{male}.equals(true)? ",'male'" : ""
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[Individual, Couple and Family counselling for victims of Domestic Violence and their families]]></textFieldExpression>
-			</textField>
-			<textField>
+				<text><![CDATA[Individual, Couple and Family counselling for victims of Domestic Violence and their families]]></text>
+			</staticText>
+			<staticText>
 				<reportElement x="42" y="120" width="331" height="25"/>
 				<box leftPadding="0" rightPadding="0">
 					<pen lineWidth="0.0"/>
@@ -569,8 +569,8 @@ $P{male}.equals(true)? ",'male'" : ""
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[Public Awareness - Gender Based Violence/HIV/Sexual Reproductive Health & Rights]]></textFieldExpression>
-			</textField>
+				<text><![CDATA[Public Awareness - Gender Based Violence/HIV/Sexual Reproductive Health & Rights]]></text>
+			</staticText>
 			<textField isBlankWhenNull="true">
 				<reportElement x="372" y="182" width="80" height="12"/>
 				<box leftPadding="5" rightPadding="5">
@@ -627,7 +627,7 @@ $P{male}.equals(true)? ",'male'" : ""
 				</textElement>
 				<textFieldExpression><![CDATA[$F{comm_outreach_events}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<staticText>
 				<reportElement x="42" y="206" width="331" height="12"/>
 				<box leftPadding="0" rightPadding="0">
 					<pen lineWidth="0.0"/>
@@ -639,8 +639,8 @@ $P{male}.equals(true)? ",'male'" : ""
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[Advocacy and Lobbying]]></textFieldExpression>
-			</textField>
+				<text><![CDATA[Advocacy and Lobbying]]></text>
+			</staticText>
 			<textField isBlankWhenNull="true">
 				<reportElement x="372" y="206" width="80" height="12"/>
 				<box leftPadding="5" rightPadding="5">
@@ -655,7 +655,7 @@ $P{male}.equals(true)? ",'male'" : ""
 				</textElement>
 				<textFieldExpression><![CDATA[$F{advocacy_and_lobbying}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<staticText>
 				<reportElement x="42" y="194" width="331" height="12"/>
 				<box leftPadding="0" rightPadding="0">
 					<pen lineWidth="0.0"/>
@@ -667,8 +667,8 @@ $P{male}.equals(true)? ",'male'" : ""
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[Community Outreach Events]]></textFieldExpression>
-			</textField>
+				<text><![CDATA[Community Outreach Events]]></text>
+			</staticText>
 			<textField isBlankWhenNull="true">
 				<reportElement x="372" y="120" width="80" height="24"/>
 				<box leftPadding="5" rightPadding="5">
@@ -697,7 +697,7 @@ $P{male}.equals(true)? ",'male'" : ""
 				</textElement>
 				<textFieldExpression><![CDATA[$F{family_couns_DV}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<staticText>
 				<reportElement x="42" y="100" width="331" height="20"/>
 				<box leftPadding="0" rightPadding="0">
 					<pen lineWidth="0.0"/>
@@ -709,9 +709,9 @@ $P{male}.equals(true)? ",'male'" : ""
 				<textElement verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[Social Services]]></textFieldExpression>
-			</textField>
-			<textField>
+				<text><![CDATA[Social Services]]></text>
+			</staticText>
+			<staticText>
 				<reportElement x="42" y="227" width="331" height="20"/>
 				<box leftPadding="0" rightPadding="0">
 					<pen lineWidth="0.0"/>
@@ -723,8 +723,8 @@ $P{male}.equals(true)? ",'male'" : ""
 				<textElement verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[Sexual and reproductive health]]></textFieldExpression>
-			</textField>
+				<text><![CDATA[Sexual and reproductive health]]></text>
+			</staticText>
 			<staticText>
 				<reportElement style="column_header" mode="Opaque" x="3" y="258" width="553" height="7"/>
 				<box leftPadding="0" bottomPadding="5" rightPadding="0">
@@ -739,7 +739,7 @@ $P{male}.equals(true)? ",'male'" : ""
 				</textElement>
 				<text><![CDATA[]]></text>
 			</staticText>
-			<textField>
+			<staticText>
 				<reportElement x="42" y="246" width="331" height="12"/>
 				<box leftPadding="0" rightPadding="0">
 					<pen lineWidth="0.0"/>
@@ -751,8 +751,8 @@ $P{male}.equals(true)? ",'male'" : ""
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[HCT (HIV Counselling and Testing)]]></textFieldExpression>
-			</textField>
+				<text><![CDATA[HCT (HIV Counselling and Testing)]]></text>
+			</staticText>
 			<textField isBlankWhenNull="true">
 				<reportElement x="372" y="227" width="80" height="20"/>
 				<box leftPadding="5" rightPadding="5">
@@ -781,7 +781,7 @@ $P{male}.equals(true)? ",'male'" : ""
 				</textElement>
 				<textFieldExpression><![CDATA[$F{SexualServHct}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<staticText>
 				<reportElement x="42" y="322" width="331" height="12"/>
 				<box leftPadding="0" rightPadding="0">
 					<pen lineWidth="0.0"/>
@@ -793,9 +793,9 @@ $P{male}.equals(true)? ",'male'" : ""
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[Thuthuzela Care Centre process information]]></textFieldExpression>
-			</textField>
-			<textField>
+				<text><![CDATA[Thuthuzela Care Centre process information]]></text>
+			</staticText>
+			<staticText>
 				<reportElement x="42" y="310" width="331" height="12"/>
 				<box leftPadding="0" rightPadding="0">
 					<pen lineWidth="0.0"/>
@@ -807,8 +807,8 @@ $P{male}.equals(true)? ",'male'" : ""
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[PEP Information and Adherence]]></textFieldExpression>
-			</textField>
+				<text><![CDATA[PEP Information and Adherence]]></text>
+			</staticText>
 			<textField isBlankWhenNull="true">
 				<reportElement x="372" y="266" width="80" height="20"/>
 				<box leftPadding="5" rightPadding="5">
@@ -823,7 +823,7 @@ $P{male}.equals(true)? ",'male'" : ""
 				</textElement>
 				<textFieldExpression><![CDATA[$F{prog_provided_sexual_violence}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<staticText>
 				<reportElement x="42" y="298" width="331" height="12"/>
 				<box leftPadding="0" rightPadding="0">
 					<pen lineWidth="0.0"/>
@@ -835,8 +835,8 @@ $P{male}.equals(true)? ",'male'" : ""
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[Awareness raising activities]]></textFieldExpression>
-			</textField>
+				<text><![CDATA[Awareness raising activities]]></text>
+			</staticText>
 			<textField isBlankWhenNull="true">
 				<reportElement x="372" y="322" width="80" height="12"/>
 				<box leftPadding="5" rightPadding="5">
@@ -851,7 +851,7 @@ $P{male}.equals(true)? ",'male'" : ""
 				</textElement>
 				<textFieldExpression><![CDATA[$F{thuthuzela_info}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<staticText>
 				<reportElement x="42" y="286" width="331" height="12"/>
 				<box leftPadding="0" rightPadding="0">
 					<pen lineWidth="0.0"/>
@@ -863,8 +863,8 @@ $P{male}.equals(true)? ",'male'" : ""
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[Containment counselling of victims of sexual violence]]></textFieldExpression>
-			</textField>
+				<text><![CDATA[Containment counselling of victims of sexual violence]]></text>
+			</staticText>
 			<staticText>
 				<reportElement style="column_header" mode="Opaque" x="1" y="334" width="553" height="7"/>
 				<box leftPadding="0" bottomPadding="5" rightPadding="0">
@@ -921,7 +921,7 @@ $P{male}.equals(true)? ",'male'" : ""
 				</textElement>
 				<textFieldExpression><![CDATA[$F{awareness_raising_act}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<staticText>
 				<reportElement x="42" y="266" width="331" height="20"/>
 				<box leftPadding="0" rightPadding="0">
 					<pen lineWidth="0.0"/>
@@ -933,8 +933,8 @@ $P{male}.equals(true)? ",'male'" : ""
 				<textElement verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[Sexual Violence]]></textFieldExpression>
-			</textField>
+				<text><![CDATA[Sexual Violence]]></text>
+			</staticText>
 			<textField isBlankWhenNull="true">
 				<reportElement x="372" y="361" width="80" height="12"/>
 				<box leftPadding="5" rightPadding="5">
@@ -977,7 +977,7 @@ $P{male}.equals(true)? ",'male'" : ""
 				</textElement>
 				<textFieldExpression><![CDATA[$F{group_education}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<staticText>
 				<reportElement x="42" y="373" width="331" height="12"/>
 				<box leftPadding="0" rightPadding="0">
 					<pen lineWidth="0.0"/>
@@ -989,9 +989,9 @@ $P{male}.equals(true)? ",'male'" : ""
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[Group education with young men on SRHR, gender equality and caregiving]]></textFieldExpression>
-			</textField>
-			<textField>
+				<text><![CDATA[Group education with young men on SRHR, gender equality and caregiving]]></text>
+			</staticText>
+			<staticText>
 				<reportElement x="42" y="361" width="331" height="12"/>
 				<box leftPadding="0" rightPadding="0">
 					<pen lineWidth="0.0"/>
@@ -1003,9 +1003,9 @@ $P{male}.equals(true)? ",'male'" : ""
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[Counselling]]></textFieldExpression>
-			</textField>
-			<textField>
+				<text><![CDATA[Counselling]]></text>
+			</staticText>
+			<staticText>
 				<reportElement x="42" y="385" width="331" height="12"/>
 				<box leftPadding="0" rightPadding="0">
 					<pen lineWidth="0.0"/>
@@ -1017,8 +1017,8 @@ $P{male}.equals(true)? ",'male'" : ""
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[Community campaigns/awareness on mencare+]]></textFieldExpression>
-			</textField>
+				<text><![CDATA[Community campaigns/awareness on mencare]]></text>
+			</staticText>
 			<textField>
 				<reportElement x="42" y="341" width="331" height="20"/>
 				<box leftPadding="0" rightPadding="0">
@@ -1031,7 +1031,7 @@ $P{male}.equals(true)? ",'male'" : ""
 				<textElement verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[Mencare+]]></textFieldExpression>
+				<textFieldExpression><![CDATA[Mencare]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="372" y="385" width="80" height="12"/>
