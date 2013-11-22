@@ -18,6 +18,12 @@
 	</parameter>
 	<parameter name="female" class="java.lang.Boolean"/>
 	<parameter name="male" class="java.lang.Boolean"/>
+	<variable name="female_sql" class="java.lang.String">
+		<variableExpression><![CDATA[$P{female}.equals(true)? ",'female'" : ""]]></variableExpression>
+	</variable>
+	<variable name="male_sql" class="java.lang.String">
+		<variableExpression><![CDATA[$P{male}.equals(true)? ",'male'" : ""]]></variableExpression>
+	</variable>
 	<queryString>
 		<![CDATA[SELECT
  count(pp_court.id) as 'prog_provided_court', -- Court support
@@ -139,11 +145,9 @@ FROM mosaic_visit_form_v1 mvf1
       ON comm_campaigns.id = mvf1.id
 
 
-WHERE mvf1.gender in (''
-$P{female}.equals(true)? ",'female'" : ""
-$P{male}.equals(true)? ",'male'" : ""
-) and
-  mvf1.MaritalStatus in ('married', 'single', 'living_together','widowed', 'divorced')
+WHERE 
+  mvf1.gender in (''$V{female_sql}$V{male_sql})
+  and mvf1.MaritalStatus in ('married', 'single', 'living_together','widowed', 'divorced')
   and mvf1.location in ('wynberg','bellv','khayel','atlantis', 'paarl','welling','mitchels_p')
   and (mvf1.age < 21 or (mvf1.age >= 21 and mvf1.age <= 40)
     or (mvf1.age >= 41 and mvf1.age <=65)
