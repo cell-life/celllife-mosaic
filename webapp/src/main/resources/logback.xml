@@ -9,7 +9,7 @@
 
     <!-- Cell-Life -->
 
-    <logger name="org.celllife" level="WARN" />
+    <logger name="org.celllife" level="DEBUG" />
 
     <!-- Hibernate -->
 

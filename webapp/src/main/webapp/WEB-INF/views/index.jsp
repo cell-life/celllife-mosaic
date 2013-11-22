@@ -24,16 +24,16 @@
 
 <div class="container">
 
-    <div class="masthead">
+
+    <div class="header">
         <ul class="nav nav-pills pull-right">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Contact</a></li>
+            <li class="active"><a href="${pageContext.request.contextPath}">Home</a></li>
             <li><a href="j_spring_cas_security_logout">Logout</a>
         </ul>
-        <h2><img src="resources/img/logo.png"></h2>
+        <h2><img class="ohsc-logo" src="resources/img/logo.png"></h2>
 
         <h3 class="muted">MOSAIC DASHBOARD</h3>
+
     </div>
 
     <hr>
@@ -70,6 +70,7 @@
     $(document).ready(function () {
 
         $(".reportLink").click(function () {
+
             var reportId = $(this).attr('href') + '';
             reportId = reportId.replace('#', '');
 

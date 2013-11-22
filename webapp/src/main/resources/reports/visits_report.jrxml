@@ -18,12 +18,6 @@
 	</parameter>
 	<parameter name="female" class="java.lang.Boolean"/>
 	<parameter name="male" class="java.lang.Boolean"/>
-	<variable name="female_sql" class="java.lang.String">
-		<variableExpression><![CDATA[$P{female}.equals(true)? ",'female'" : ""]]></variableExpression>
-	</variable>
-	<variable name="male_sql" class="java.lang.String">
-		<variableExpression><![CDATA[$P{male}.equals(true)? ",'male'" : ""]]></variableExpression>
-	</variable>
 	<queryString>
 		<![CDATA[SELECT
  count(pp_court.id) as 'prog_provided_court', -- Court support
@@ -146,7 +140,7 @@ FROM mosaic_visit_form_v1 mvf1
 
 
 WHERE 
-  mvf1.gender in (''$V{female_sql}$V{male_sql})
+  mvf1.gender in ('male','female')
   and mvf1.MaritalStatus in ('married', 'single', 'living_together','widowed', 'divorced')
   and mvf1.location in ('wynberg','bellv','khayel','atlantis', 'paarl','welling','mitchels_p')
   and (mvf1.age < 21 or (mvf1.age >= 21 and mvf1.age <= 40)
@@ -1021,9 +1015,9 @@ WHERE
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<text><![CDATA[Community campaigns/awareness on mencare \U+002B]]></text>
+				<text><![CDATA[Community campaigns/awareness on mencare ]]></text>
 			</staticText>
-			<textField>
+			<staticText>
 				<reportElement x="42" y="341" width="331" height="20"/>
 				<box leftPadding="0" rightPadding="0">
 					<pen lineWidth="0.0"/>
@@ -1035,8 +1029,8 @@ WHERE
 				<textElement verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[Mencare \U+002B]]></textFieldExpression>
-			</textField>
+				<text><![CDATA[Mencare ]]></text>
+			</staticText>
 			<textField isBlankWhenNull="true">
 				<reportElement x="372" y="385" width="80" height="12"/>
 				<box leftPadding="5" rightPadding="5">

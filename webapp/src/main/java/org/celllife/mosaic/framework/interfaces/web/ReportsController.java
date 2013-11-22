@@ -1,5 +1,6 @@
 package org.celllife.mosaic.framework.interfaces.web;
 
+import org.celllife.pconfig.model.Parameter;
 import org.celllife.pconfig.model.Pconfig;
 import org.celllife.reporting.service.PconfigParameterHtmlService;
 import org.celllife.reporting.service.ReportService;
@@ -16,10 +17,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.OutputStream;
 import java.util.Collection;
+import java.util.List;
 
 @Controller
 public class ReportsController {
@@ -57,8 +60,6 @@ public class ReportsController {
     @RequestMapping(value = "/service/pdfReport", method = RequestMethod.GET, produces = "application/pdf")
     public void getPdfReport(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-        System.out.println("Request Received. " + request.getParameterMap().toString());
-
         String reportId = request.getParameter("reportId");
         if (reportId.isEmpty()) {
             throw new RuntimeException("Could not retrieve this report.");
@@ -67,26 +68,28 @@ public class ReportsController {
             Pconfig pconfig = reportService.getReportByName(reportId);
             Pconfig returnedPconfig = pconfigParameterHtmlService.createPconfigFromHtmlFormSubmission(request.getParameterNames(), request.getParameterMap(), pconfig);
 
-            //String generatedReport = reportService.generateReport(pconfig);
+            String generatedReport = null;
+            File pdf = null;
+            try {
+                generatedReport = reportService.generateReport(returnedPconfig);
+                pdf = reportService.getGeneratedReportFile(generatedReport);
+            } catch (Exception e) {
+                throw new RuntimeException("Could not retrieve report with ID " + reportId + ". " + e.getLocalizedMessage() +  " Please contact support@cell-life.org");
+            }
 
             response.setContentType("application/pdf");
-            response.setHeader("Content-Disposition", "attachment; filename=\"report.pdf\"");
-            OutputStreamWriter out = null;
+            response.setHeader("Content-Disposition", "attachment; filename=\"report-" + generatedReport + ".pdf\"");
             try {
-                out = new OutputStreamWriter(new BufferedOutputStream(response.getOutputStream()));
-                out.write("Hello");
+                FileInputStream fileInputStream = new FileInputStream(pdf);
+                OutputStream responseOutputStream = response.getOutputStream();
+                int bytes;
+                while ((bytes = fileInputStream.read()) != -1) {
+                    responseOutputStream.write(bytes);
+                }
             } catch (IOException e) {
                 throw new RuntimeException("Could not create PDF.", e);
-            } finally {
-                try {
-                    if (out != null) {
-                        out.flush();
-                        out.close();
-                    }
-                } catch (IOException e) {
-                    log.warn("Ignoring IOException thrown when trying to close and flush the OutputStream.", e.getMessage());
-                }
             }
+
         }
     }
 
