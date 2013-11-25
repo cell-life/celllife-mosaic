@@ -8,26 +8,27 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>TITLE</title>
+    <title>MOSAIC Dashboard</title>
 
     <c:set var="url">${pageContext.request.requestURL}</c:set>
     <base href="${fn:substring(url, 0, fn:length(url) - fn:length(pageContext.request.requestURI))}${pageContext.request.contextPath}/" />
 
-    <link href="resources/css/bootstrap-3.0.0.min.css" rel="stylesheet" media="screen">
-    <link href="resources/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="resources/css/bootstrap-3.0.2.css" rel="stylesheet" media="screen">
+    <link href="resources/css/bootstrap-theme-3.0.2.css" rel="stylesheet">
 </head>
 <body>
 
 <div class="container">
 
-    <div class="masthead">
+    <div class="header">
         <ul class="nav nav-pills pull-right">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Contact</a></li>
+            <li class="active"><a href="${pageContext.request.contextPath}">Home</a></li>
             <li><a href="j_spring_cas_security_logout">Logout</a>
         </ul>
-        <h3 class="muted">HEADING</h3>
+        <h2><img class="ohsc-logo" src="resources/img/logo.png"></h2>
+
+        <h3 class="muted">MOSAIC Dashboard</h3>
+
     </div>
 
     <hr>

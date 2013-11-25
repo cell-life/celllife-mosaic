@@ -6,7 +6,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>TITLE</title>
+    <title>MOSAIC Dashboard</title>
 
     <c:set var="url">${pageContext.request.requestURL}</c:set>
     <base href="${fn:substring(url, 0, fn:length(url) - fn:length(pageContext.request.requestURI))}${pageContext.request.contextPath}/"/>
@@ -32,13 +32,13 @@
         </ul>
         <h2><img class="ohsc-logo" src="resources/img/logo.png"></h2>
 
-        <h3 class="muted">MOSAIC DASHBOARD</h3>
+        <h3 class="muted">MOSAIC Dashboard</h3>
 
     </div>
 
     <hr>
 
-    <h3>Click on a Report</h3>
+    <h3>Select a Report</h3>
     <br>
 
     <div class="row">
