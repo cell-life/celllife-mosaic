@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="feedback_SRH_sub_report" language="groovy" pageWidth="555" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="start_date" class="java.util.Date"/>
+	<parameter name="end_date" class="java.util.Date"/>
+	<queryString>
+		<![CDATA[SELECT
+feedback.Program as 'Program', feedback.Service as 'Service', AVG(feedback.UsefulInfo) as 'UsefulInfo', AVG(feedback.Impact) as 'Impact', AVG(feedback.OverallRating) as 'OverallRating', ((UsefulInfo+Impact+OverallRating)/3) as 'AvgRating'
+FROM
+ (SELECT
+	Program, Service,
+    (CASE UsefulInfo WHEN 'very_bad' THEN 1 WHEN 'bad' THEN 2 WHEN 'average' THEN 3 WHEN 'good' THEN 4 WHEN 'very_good' THEN 5 ELSE 0 END) as 'UsefulInfo',
+    (CASE Impact WHEN 'very_bad' THEN 1 WHEN 'bad' THEN 2 WHEN 'average' THEN 3 WHEN 'good' THEN 4 WHEN 'very_good' THEN 5 ELSE 0 END) as 'Impact',
+    (CASE OverallRating WHEN 'very_bad' THEN 1 WHEN 'bad' THEN 2 WHEN 'average' THEN 3 WHEN 'good' THEN 4 WHEN 'very_good' THEN 5 ELSE 0 END) as 'OverallRating'
+   FROM
+   (
+  -- Sexual and reproductive health --
+  (SELECT id, 'Sexual and reproductive health' as Program, 'HIV Counselling and Testing' as Service, UsefulInfo, Impact, OverallRating
+	 FROM mosaic_feedback_form_v1
+	 WHERE ProgProvided = 'SRH_prog' and CourtServ like '%SexualServHct%' and date between '2013-01-01' and $P{end_date}
+  )
+ ) AS feedback_text
+) AS feedback
+GROUP BY Program, Service;]]>
+	</queryString>
+	<field name="Program" class="java.lang.String"/>
+	<field name="Service" class="java.lang.String"/>
+	<field name="UsefulInfo" class="java.lang.Number"/>
+	<field name="Impact" class="java.lang.Number"/>
+	<field name="OverallRating" class="java.lang.Number"/>
+	<field name="AvgRating" class="java.lang.Number"/>
+	<variable name="avg_UsefulInfo" class="java.lang.Number" calculation="Average">
+		<variableExpression><![CDATA[$F{UsefulInfo}]]></variableExpression>
+	</variable>
+	<variable name="avg_Impact" class="java.lang.Number" calculation="Average">
+		<variableExpression><![CDATA[$F{Impact}]]></variableExpression>
+	</variable>
+	<variable name="avg_OverallRating" class="java.lang.Number" calculation="Average">
+		<variableExpression><![CDATA[$F{OverallRating}]]></variableExpression>
+	</variable>
+	<variable name="avg_AvgRating" class="java.lang.Number" calculation="Average">
+		<variableExpression><![CDATA[$F{AvgRating}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="33" splitType="Stretch">
+			<staticText>
+				<reportElement x="11" y="10" width="163" height="20"/>
+				<box topPadding="5" leftPadding="0"/>
+				<textElement/>
+				<text><![CDATA[Sexual & Reproductive Health]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="15" splitType="Stretch">
+			<staticText>
+				<reportElement x="11" y="0" width="189" height="15"/>
+				<box topPadding="5" leftPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Service]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="455" y="0" width="85" height="15"/>
+				<box topPadding="5" leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total average]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="200" y="0" width="85" height="15"/>
+				<box topPadding="5" leftPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Useful information]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="285" y="0" width="85" height="15"/>
+				<box topPadding="5" leftPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Intervention impact]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="370" y="0" width="85" height="15"/>
+				<box topPadding="5" leftPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Overall rating]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="25" splitType="Stretch">
+			<textField pattern="###0;-###0" isBlankWhenNull="true">
+				<reportElement x="11" y="0" width="189" height="25"/>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Service}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.0;-###0.0" isBlankWhenNull="true">
+				<reportElement x="200" y="0" width="85" height="25"/>
+				<box leftPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{UsefulInfo}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.0;-###0.0" isBlankWhenNull="true">
+				<reportElement x="285" y="0" width="85" height="25"/>
+				<box leftPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Impact}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.0;-###0.0" isBlankWhenNull="true">
+				<reportElement x="370" y="0" width="85" height="25"/>
+				<box leftPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{OverallRating}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.0;-###0.0" isBlankWhenNull="true">
+				<reportElement x="455" y="0" width="85" height="25"/>
+				<box leftPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{AvgRating}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="15" splitType="Stretch">
+			<textField pattern="###0.0;-###0.0" isBlankWhenNull="true">
+				<reportElement x="200" y="0" width="85" height="15"/>
+				<box leftPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{avg_UsefulInfo}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.0;-###0.0" isBlankWhenNull="true">
+				<reportElement x="285" y="0" width="85" height="15"/>
+				<box leftPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{avg_Impact}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.0;-###0.0" isBlankWhenNull="true">
+				<reportElement x="370" y="0" width="85" height="15"/>
+				<box leftPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{avg_OverallRating}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.0;-###0.0" isBlankWhenNull="true">
+				<reportElement x="455" y="0" width="85" height="15"/>
+				<box leftPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{avg_AvgRating}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="11" y="0" width="189" height="15"/>
+				<box topPadding="0" leftPadding="5" rightPadding="5"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[AVERAGE]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

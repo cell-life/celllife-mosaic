@@ -1,0 +1,795 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="referrals_report" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryNewPage="true" isSummaryWithPageHeaderAndFooter="true">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="288"/>
+	<template><![CDATA[$P{SUBREPORT_DIR} + "report_style_template.jrtx"]]></template>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="cal" class="java.util.Calendar" isForPrompting="false">
+		<defaultValueExpression><![CDATA[Calendar.getInstance()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="start_date" class="java.util.Date">
+		<defaultValueExpression><![CDATA[(  $P{cal}.set(Calendar.DAY_OF_MONTH, $P{cal}.getActualMinimum(Calendar.DAY_OF_MONTH)) ) ? null : $P{cal}.getTime()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="end_date" class="java.util.Date">
+		<defaultValueExpression><![CDATA[(  $P{cal}.set(Calendar.DAY_OF_MONTH, $P{cal}.getActualMaximum(Calendar.DAY_OF_MONTH)) ) ? null : $P{cal}.getTime()]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+  attendence.PatRefCode as 'client_ref',
+ -- court support
+ (attendence.allProgProvided like '%court_sup_prog%') as 'court_support_visit', -- 1=referred 0=n/a
+ (attendence.allRefBy like '%court_support%') as 'court_support_referral', -- 1=attended, 0/null=not attended
+ -- social services
+ (attendence.allProgProvided like '%social_serv_prog%') as 'social_serv_visit',
+ (attendence.allRefBy = 'social_serv') as 'social_serv_referral',
+ -- sexual & reproductive health
+ (attendence.allProgProvided like '%SRH_prog%') as 'SRH_visit',
+ (attendence.allRefBy = 'SRH') as 'SRH_referral',
+-- sexual violence
+ (attendence.allProgProvided like '%SV_prog%') as 'SV_visit',
+ (attendence.allRefBy = 'SVP') as 'SV_referral',
+-- mencare+
+ (attendence.allProgProvided like '%mencare_prog%') as 'mencare_visit',
+ (attendence.allRefBy = 'mencare') as 'mencare_referral'
+FROM
+ (
+SELECT mvf1.PatRefCode, mvf1.ProgProvided as allProgProvided, GROUP_CONCAT(mrf1.RefBy, ' ') as allRefBy
+FROM mosaic_visit_form_v1 mvf1
+  LEFT JOIN mosaic_referral_form_v1 mrf1 on
+    (((mrf1.IdNum = mvf1.IdNum) or (mrf1.PassNum = mvf1.PassNum))
+       or ((mrf1.IdNum = null or mvf1.IdNum = null) and (mrf1.PassNum = null or mvf1.PassNum = null) and (mrf1.PatRefCode = mvf1.PatRefCode)))
+WHERE
+ mvf1.date between $P{start_date} and $P{end_date}
+GROUP BY mvf1.id
+ ) as attendence;]]>
+	</queryString>
+	<field name="client_ref" class="java.lang.String"/>
+	<field name="court_support_visit" class="java.lang.Number"/>
+	<field name="court_support_referral" class="java.lang.Number"/>
+	<field name="social_serv_visit" class="java.lang.Number"/>
+	<field name="social_serv_referral" class="java.lang.Number"/>
+	<field name="SRH_visit" class="java.lang.Number"/>
+	<field name="SRH_referral" class="java.lang.Number"/>
+	<field name="SV_visit" class="java.lang.Number"/>
+	<field name="SV_referral" class="java.lang.Number"/>
+	<field name="mencare_visit" class="java.lang.Number"/>
+	<field name="mencare_referral" class="java.lang.Number"/>
+	<variable name="court_support_total" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{court_support_visit}]]></variableExpression>
+	</variable>
+	<variable name="court_support_attended" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{court_support_referral}]]></variableExpression>
+	</variable>
+	<variable name="court_support_notattended" class="java.lang.Number">
+		<variableExpression><![CDATA[$V{court_support_total} - $V{court_support_attended}]]></variableExpression>
+	</variable>
+	<variable name="court_support_percentage" class="java.lang.Float">
+		<variableExpression><![CDATA[new Float($V{court_support_attended}.floatValue()/$V{court_support_total}.floatValue())]]></variableExpression>
+	</variable>
+	<variable name="social_serv_total" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{social_serv_visit}]]></variableExpression>
+	</variable>
+	<variable name="social_serv_attended" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{social_serv_referral}]]></variableExpression>
+	</variable>
+	<variable name="social_serv_notattended" class="java.lang.Number">
+		<variableExpression><![CDATA[$V{social_serv_total} - $V{social_serv_attended}]]></variableExpression>
+	</variable>
+	<variable name="social_serv_percentage" class="java.lang.Float">
+		<variableExpression><![CDATA[new Float($V{social_serv_attended}.floatValue()/$V{social_serv_total}.floatValue())]]></variableExpression>
+	</variable>
+	<variable name="SRH_total" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{SRH_visit}]]></variableExpression>
+	</variable>
+	<variable name="SRH_attended" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{SRH_referral}]]></variableExpression>
+	</variable>
+	<variable name="SRH_notattended" class="java.lang.Number">
+		<variableExpression><![CDATA[$V{SRH_total} - $V{SRH_attended}]]></variableExpression>
+	</variable>
+	<variable name="SRH_percentage" class="java.lang.Float">
+		<variableExpression><![CDATA[new Float($V{SRH_attended}.floatValue()/$V{SRH_total}.floatValue())]]></variableExpression>
+	</variable>
+	<variable name="SV_total" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{SV_visit}]]></variableExpression>
+	</variable>
+	<variable name="SV_attended" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{SV_referral}]]></variableExpression>
+	</variable>
+	<variable name="SV_notattended" class="java.lang.Number">
+		<variableExpression><![CDATA[$V{SV_total} - $V{SV_attended}]]></variableExpression>
+	</variable>
+	<variable name="SV_percentage" class="java.lang.Float">
+		<variableExpression><![CDATA[new Float($V{SV_attended}.floatValue()/$V{SV_total}.floatValue())]]></variableExpression>
+	</variable>
+	<variable name="mencare_total" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{mencare_visit}]]></variableExpression>
+	</variable>
+	<variable name="mencare_attended" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{mencare_referral}]]></variableExpression>
+	</variable>
+	<variable name="mencare_notattended" class="java.lang.Number">
+		<variableExpression><![CDATA[$V{mencare_total} - $V{mencare_attended}]]></variableExpression>
+	</variable>
+	<variable name="mencare_percentage" class="java.lang.Float">
+		<variableExpression><![CDATA[new Float($V{mencare_attended}.floatValue()/$V{mencare_total}.floatValue())]]></variableExpression>
+	</variable>
+	<title>
+		<band height="130" splitType="Stretch">
+			<staticText>
+				<reportElement style="report_title" mode="Transparent" x="1" y="84" width="555" height="46"/>
+				<textElement verticalAlignment="Middle">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[MOSAIC: Summary report of attended Programs]]></text>
+			</staticText>
+			<image>
+				<reportElement stretchType="RelativeToBandHeight" x="1" y="1" width="82" height="82"/>
+				<imageExpression><![CDATA[$P{SUBREPORT_DIR} + "mosaic-logo.jpg"]]></imageExpression>
+			</image>
+			<textField pattern="EEE, d MMM yyyy HH:mm">
+				<reportElement x="412" y="1" width="141" height="20"/>
+				<box leftPadding="5"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="298" y="1" width="114" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Report generated on:]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="67">
+			<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+			<rectangle>
+				<reportElement x="1" y="1" width="553" height="35" backcolor="#EEEEEE"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="14" y="11" width="53" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Date:]]></text>
+			</staticText>
+			<textField pattern="dd MMMMM yyyy">
+				<reportElement x="87" y="11" width="111" height="15"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{start_date}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="198" y="11" width="17" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[to]]></text>
+			</staticText>
+			<textField pattern="dd MMMMM yyyy">
+				<reportElement x="215" y="11" width="111" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{end_date}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="46" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Individual List]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="47" splitType="Stretch">
+			<staticText>
+				<reportElement x="1" y="0" width="88" height="47"/>
+				<box topPadding="5" leftPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Client Ref]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="275" y="0" width="93" height="47"/>
+				<box topPadding="5" leftPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sexual & Reproductive Health]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="368" y="0" width="93" height="47"/>
+				<box topPadding="5" leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sexual Violence]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="461" y="0" width="93" height="47"/>
+				<box topPadding="5" leftPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Mencare+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="182" y="0" width="93" height="47"/>
+				<box topPadding="5" leftPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Social services]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="89" y="0" width="93" height="47"/>
+				<box topPadding="5" leftPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Court support]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="13" splitType="Stretch">
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement x="89" y="0" width="93" height="13"/>
+				<box leftPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{court_support_visit} == 0 ? "-" : ($F{court_support_referral} != null && $F{court_support_referral} == 1 ? "Y" : "N"))]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement x="182" y="0" width="93" height="13"/>
+				<box leftPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{social_serv_visit} == 0 ? "-" : ($F{social_serv_referral} != null && $F{social_serv_referral} == 1 ? "Y" : "N"))]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement x="275" y="0" width="93" height="13"/>
+				<box leftPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{SRH_visit} == 0 ? "-" : ($F{SRH_referral} != null && $F{SRH_referral} == 1 ? "Y" : "N"))]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement x="368" y="0" width="93" height="13"/>
+				<box leftPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{SV_visit} == 0 ? "-" : ($F{SV_referral} != null && $F{SV_referral} == 1 ? "Y" : "N"))]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement x="461" y="0" width="93" height="13"/>
+				<box leftPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{mencare_visit} == 0 ? "-" : ($F{mencare_referral} != null && $F{mencare_referral} == 1 ? "Y" : "N"))]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0;-###0" isBlankWhenNull="true">
+				<reportElement x="1" y="0" width="88" height="13"/>
+				<box leftPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{client_ref}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="52" splitType="Stretch">
+			<image>
+				<reportElement x="0" y="11" width="128" height="40"/>
+				<imageExpression><![CDATA[$P{SUBREPORT_DIR} + "cell-life.png"]]></imageExpression>
+			</image>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-5" x="399" y="31" width="80" height="20"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page " + String.valueOf($V{PAGE_NUMBER}) + " of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report" isBlankWhenNull="false">
+				<reportElement key="textField-4" x="480" y="31" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + String.valueOf($V{PAGE_NUMBER})]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="317">
+			<rectangle>
+				<reportElement x="1" y="132" width="553" height="35" backcolor="#EEEEEE"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="186" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Aggregated List]]></text>
+			</staticText>
+			<textField pattern="#,##0.00 %" isBlankWhenNull="true">
+				<reportElement x="89" y="295" width="93" height="21"/>
+				<box leftPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{court_support_percentage}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="295" width="88" height="21"/>
+				<box topPadding="5" leftPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Attended %]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="274" width="88" height="21"/>
+				<box topPadding="5" leftPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Unattended]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="275" y="206" width="93" height="47"/>
+				<box topPadding="5" leftPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sexual & Reproductive Health]]></text>
+			</staticText>
+			<textField pattern="#,##0.00 %" isBlankWhenNull="true">
+				<reportElement x="275" y="295" width="93" height="21"/>
+				<box leftPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{SRH_percentage}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00 %" isBlankWhenNull="true">
+				<reportElement x="182" y="295" width="93" height="21"/>
+				<box leftPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{social_serv_percentage}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="182" y="206" width="93" height="47"/>
+				<box topPadding="5" leftPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Social services]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="368" y="206" width="93" height="47"/>
+				<box topPadding="5" leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sexual Violence]]></text>
+			</staticText>
+			<textField pattern="###0;-###0" isBlankWhenNull="true">
+				<reportElement x="461" y="274" width="93" height="21"/>
+				<box leftPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{mencare_notattended}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0;-###0" isBlankWhenNull="true">
+				<reportElement x="275" y="253" width="93" height="21"/>
+				<box leftPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{SRH_attended}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0;-###0" isBlankWhenNull="true">
+				<reportElement x="182" y="274" width="93" height="21"/>
+				<box leftPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{social_serv_notattended}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0;-###0" isBlankWhenNull="true">
+				<reportElement x="275" y="274" width="93" height="21"/>
+				<box leftPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{SRH_notattended}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00 %" isBlankWhenNull="true">
+				<reportElement x="461" y="295" width="93" height="21"/>
+				<box leftPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{mencare_percentage}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="89" y="206" width="93" height="47"/>
+				<box topPadding="5" leftPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Court support]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="206" width="88" height="47"/>
+				<box topPadding="5" leftPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="253" width="88" height="21"/>
+				<box topPadding="5" leftPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Attended]]></text>
+			</staticText>
+			<textField pattern="#,##0.00 %" isBlankWhenNull="true">
+				<reportElement x="368" y="295" width="93" height="21"/>
+				<box leftPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{SV_percentage}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0;-###0" isBlankWhenNull="true">
+				<reportElement x="368" y="253" width="93" height="21"/>
+				<box leftPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{SV_attended}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0;-###0" isBlankWhenNull="true">
+				<reportElement x="368" y="274" width="93" height="21"/>
+				<box leftPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{SV_notattended}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0;-###0" isBlankWhenNull="true">
+				<reportElement x="89" y="274" width="93" height="21"/>
+				<box leftPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{court_support_notattended}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0;-###0" isBlankWhenNull="true">
+				<reportElement x="89" y="253" width="93" height="21"/>
+				<box leftPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{court_support_attended}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0;-###0" isBlankWhenNull="true">
+				<reportElement x="461" y="253" width="93" height="21"/>
+				<box leftPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{mencare_attended}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="461" y="206" width="93" height="47"/>
+				<box topPadding="5" leftPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Mencare+]]></text>
+			</staticText>
+			<textField pattern="###0;-###0" isBlankWhenNull="true">
+				<reportElement x="182" y="253" width="93" height="21"/>
+				<box leftPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{social_serv_attended}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="report_title" mode="Transparent" x="1" y="86" width="555" height="46"/>
+				<textElement verticalAlignment="Middle">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[MOSAIC: Summary report of attended Programs]]></text>
+			</staticText>
+			<image>
+				<reportElement stretchType="RelativeToBandHeight" x="1" y="1" width="82" height="82"/>
+				<imageExpression><![CDATA[$P{SUBREPORT_DIR} + "mosaic-logo.jpg"]]></imageExpression>
+			</image>
+			<textField pattern="EEE, d MMM yyyy HH:mm">
+				<reportElement x="412" y="4" width="141" height="20"/>
+				<box leftPadding="5"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="298" y="4" width="114" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Report generated on:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="14" y="143" width="53" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Date:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="198" y="143" width="17" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[to]]></text>
+			</staticText>
+			<textField pattern="dd MMMMM yyyy">
+				<reportElement x="215" y="143" width="111" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{end_date}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd MMMMM yyyy">
+				<reportElement x="88" y="143" width="111" height="15"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{start_date}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>
