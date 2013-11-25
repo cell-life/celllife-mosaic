@@ -63,12 +63,10 @@ GROUP BY Program, Service;]]>
 		<band height="15" splitType="Stretch">
 			<staticText>
 				<reportElement x="11" y="0" width="189" height="15"/>
-				<box topPadding="5" leftPadding="5">
+				<box topPadding="2" leftPadding="5">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.0"/>
 					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement>
 					<font size="8" isBold="true"/>
@@ -77,12 +75,10 @@ GROUP BY Program, Service;]]>
 			</staticText>
 			<staticText>
 				<reportElement x="455" y="0" width="85" height="15"/>
-				<box topPadding="5" leftPadding="2">
+				<box topPadding="2" leftPadding="5">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.0"/>
 				</box>
 				<textElement textAlignment="Center">
 					<font size="8" isBold="true"/>
@@ -91,12 +87,10 @@ GROUP BY Program, Service;]]>
 			</staticText>
 			<staticText>
 				<reportElement x="200" y="0" width="85" height="15"/>
-				<box topPadding="5" leftPadding="5">
+				<box topPadding="2" leftPadding="5">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.0"/>
 					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center">
 					<font size="8" isBold="true"/>
@@ -105,12 +99,10 @@ GROUP BY Program, Service;]]>
 			</staticText>
 			<staticText>
 				<reportElement x="285" y="0" width="85" height="15"/>
-				<box topPadding="5" leftPadding="5">
+				<box topPadding="2" leftPadding="5">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.0"/>
 					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center">
 					<font size="8" isBold="true"/>
@@ -119,12 +111,10 @@ GROUP BY Program, Service;]]>
 			</staticText>
 			<staticText>
 				<reportElement x="370" y="0" width="85" height="15"/>
-				<box topPadding="5" leftPadding="5">
+				<box topPadding="2" leftPadding="5">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.0"/>
 					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center">
 					<font size="8" isBold="true"/>
