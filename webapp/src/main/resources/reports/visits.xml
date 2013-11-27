@@ -29,6 +29,35 @@
 		<boolean label="Living together" name="living_together" defaultValue="true" />
 		<boolean label="Widowed" name="widowed" defaultValue="true" />
 		<!-- location (TODO) -->
-		<text label="Location" name="location" defaultValue="%"/>
+		<!--<text label="Location" name="location" defaultValue="%"/>-->
+        <select label="Location" name="location" >
+                <option>
+                    <name>ATLANTIS</name>
+                    <value>atlantis</value>
+                </option>
+                <option>
+                    <value>bellv</value>
+                    <name>BELLV</name>
+                </option>
+                <option><value>bishop_lavis</value><name>BISHOP LAVIS</name></option>
+                <option><value>blue_d</value><name>BLUE D</name></option>
+                <option><value>cape_town</value><name>CAPE TOWN</name></option>
+                <option><value>delft</value><name>DELFT</name></option>
+                <option><value>gugulethu</value><name>GUGULETHU</name></option>
+                <option><value>joburg</value><name>JOHANNESBURG</name></option>
+                <option><value>kuilsriv</value><name>KUILSRIV</name></option>
+                <option><value>khayel</value><name>KHAYEL</name></option>
+                <option><value>malmesbury</value><name>MALMESBURY</name></option>
+                <option><value>mitchels_p</value><name>MITCHELS P</name></option>
+                <option><value>muizen</value><name>MUIZEN</name></option>
+                <option><value>nyanga</value><name>NYANGA</name></option>
+                <option><value>paarl</value><name>PAARL</name></option>
+                <option><value>phillipi</value><name>PHILLIPI</name></option>
+                <option><value>pretoria</value><name>PRETORIA</name></option>
+                <option><value>stellen</value><name>STELLEN</name></option>
+                <option><value>welling</value><name>WELLING</name></option>
+                <option><value>wynberg</value><name>WYNBERG</name></option>
+        </select>
+
 	</parameters>
 </pconfig>
