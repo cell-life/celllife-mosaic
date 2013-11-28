@@ -28,8 +28,8 @@
 		<boolean label="Divorced" name="divorced" defaultValue="true" />
 		<boolean label="Living together" name="living_together" defaultValue="true" />
 		<boolean label="Widowed" name="widowed" defaultValue="true" />
-		<!-- location (TODO) -->
-		<!--<text label="Location" name="location" defaultValue="%"/>-->
+		<!-- location -->
+        <text name="location_name" optional="true" hidden="true"/>
         <select label="Location" name="location" >
                 <option>
                     <name>ATLANTIS</name>

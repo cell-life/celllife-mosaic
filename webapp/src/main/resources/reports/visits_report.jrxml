@@ -30,6 +30,7 @@
 	<parameter name="fourty1to65" class="java.lang.Boolean"/>
 	<parameter name="over65" class="java.lang.Boolean"/>
 	<parameter name="location" class="java.lang.String"/>
+	<parameter name="location_name" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT
  count(pp_court.id) as 'prog_provided_court', -- Court support
@@ -470,7 +471,7 @@ WHERE
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($P{location}.equals("%")? "All locations" : $P{location})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{location}.equals("%")? "All locations" : $P{location_name})]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="16" y="74" width="53" height="15"/>
