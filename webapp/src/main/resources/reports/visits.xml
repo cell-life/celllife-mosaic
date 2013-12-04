@@ -30,7 +30,8 @@
 		<boolean label="Widowed" name="widowed" defaultValue="true" />
 		<!-- location -->
         <text name="location_name" optional="true" hidden="true"/>
-        <select label="Location" name="location" >
+        <select label="Location" name="location" defaultValue="%">
+                <option><value>%</value><name>ALL LOCATIONS</name></option>
                 <option>
                     <name>ATLANTIS</name>
                     <value>atlantis</value>
