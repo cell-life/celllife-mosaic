@@ -63,92 +63,92 @@
  count(group_education.id) as 'group_education', -- Group education with young men on SRHR, gender equality and caregiving
  count(comm_campaigns.id) as 'comm_campaigns' -- Community campaigns/awareness on mencare
 
-FROM mosaic_visit_form_v1 mvf1
+FROM mosaic_mosaic_visit_form_v2 mvf1
 
 -- court services
     LEFT JOIN
-      (SELECT id from mosaic_visit_form_v1 where ProgProvided like '%court_sup_prog%') as pp_court
+      (SELECT id from mosaic_mosaic_visit_form_v2 where ProgProvided like '%court_sup_prog%') as pp_court
       ON pp_court.id = mvf1.id
     LEFT JOIN
-      (SELECT id from mosaic_visit_form_v1 where CourtServ like '%cont_counselling%') as cont_counselling
+      (SELECT id from mosaic_mosaic_visit_form_v2 where CourtServ like '%cont_counselling%') as cont_counselling
       ON cont_counselling.id = mvf1.id
     LEFT JOIN
-      (SELECT id from mosaic_visit_form_v1 where CourtServ like '%education_DVA%') as education_DVA
+      (SELECT id from mosaic_mosaic_visit_form_v2 where CourtServ like '%education_DVA%') as education_DVA
       ON education_DVA.id = mvf1.id
     LEFT JOIN
-      (SELECT id from mosaic_visit_form_v1 where CourtServ like '%info_court_proc%') as info_court_proc
+      (SELECT id from mosaic_mosaic_visit_form_v2 where CourtServ like '%info_court_proc%') as info_court_proc
       ON info_court_proc.id = mvf1.id
     LEFT JOIN
-      (SELECT id from mosaic_visit_form_v1 where CourtServ like '%referrals_SP%') as referrals_SP
+      (SELECT id from mosaic_mosaic_visit_form_v2 where CourtServ like '%referrals_SP%') as referrals_SP
       ON referrals_SP.id = mvf1.id
     LEFT JOIN
-      (SELECT id from mosaic_visit_form_v1 where CourtServ like '%info_SRH%') as info_SRH
+      (SELECT id from mosaic_mosaic_visit_form_v2 where CourtServ like '%info_SRH%') as info_SRH
       ON info_SRH.id = mvf1.id
     LEFT JOIN
-      (SELECT id from mosaic_visit_form_v1 where CourtServ like '%info_HIV_test%') as info_HIV_test
+      (SELECT id from mosaic_mosaic_visit_form_v2 where CourtServ like '%info_HIV_test%') as info_HIV_test
       ON info_HIV_test.id = mvf1.id
 
 -- social services
     LEFT JOIN
-      (SELECT id from mosaic_visit_form_v1 where ProgProvided like '%social_serv_prog%') as pp_social
+      (SELECT id from mosaic_mosaic_visit_form_v2 where ProgProvided like '%social_serv_prog%') as pp_social
       ON pp_social.id = mvf1.id
     LEFT JOIN
-      (SELECT id from mosaic_visit_form_v1 where SocialServ like '%public_awareness%') as public_awareness
+      (SELECT id from mosaic_mosaic_visit_form_v2 where SocialServ like '%public_awareness%') as public_awareness
       ON public_awareness.id = mvf1.id
     LEFT JOIN
-      (SELECT id from mosaic_visit_form_v1 where SocialServ like '%family_couns_DV%') as family_couns_DV
+      (SELECT id from mosaic_mosaic_visit_form_v2 where SocialServ like '%family_couns_DV%') as family_couns_DV
       ON family_couns_DV.id = mvf1.id
     LEFT JOIN
-      (SELECT id from mosaic_visit_form_v1 where SocialServ like '%educational_WS%') as educational_WS
+      (SELECT id from mosaic_mosaic_visit_form_v2 where SocialServ like '%educational_WS%') as educational_WS
       ON educational_WS.id = mvf1.id
     LEFT JOIN
-      (SELECT id from mosaic_visit_form_v1 where SocialServ like '%educational_SG%') as educational_SG
+      (SELECT id from mosaic_mosaic_visit_form_v2 where SocialServ like '%educational_SG%') as educational_SG
       ON educational_SG.id = mvf1.id
     LEFT JOIN
-      (SELECT id from mosaic_visit_form_v1 where SocialServ like '%comm_outreach_events%') as comm_outreach_events
+      (SELECT id from mosaic_mosaic_visit_form_v2 where SocialServ like '%comm_outreach_events%') as comm_outreach_events
       ON comm_outreach_events.id = mvf1.id
     LEFT JOIN
-      (SELECT id from mosaic_visit_form_v1 where SocialServ like '%advocacy_and_lobbying%') as advocacy_and_lobbying
+      (SELECT id from mosaic_mosaic_visit_form_v2 where SocialServ like '%advocacy_and_lobbying%') as advocacy_and_lobbying
       ON advocacy_and_lobbying.id = mvf1.id
 
 -- sexual & reproductive health
     LEFT JOIN
-      (SELECT id from mosaic_visit_form_v1 where ProgProvided like '%SRH_prog%') as pp_sexual_reprod
+      (SELECT id from mosaic_mosaic_visit_form_v2 where ProgProvided like '%SRH_prog%') as pp_sexual_reprod
       ON pp_sexual_reprod.id = mvf1.id
     LEFT JOIN
-      (SELECT id from mosaic_visit_form_v1 where SexualServ like '%SexualServHct%') as SexualServHct
+      (SELECT id from mosaic_mosaic_visit_form_v2 where SexualServ like '%SexualServHct%') as SexualServHct
       ON SexualServHct.id = mvf1.id
 
 -- sexual violence
     LEFT JOIN
-      (SELECT id from mosaic_visit_form_v1 where ProgProvided like '%SV_prog%') as pp_sexual_violence
+      (SELECT id from mosaic_mosaic_visit_form_v2 where ProgProvided like '%SV_prog%') as pp_sexual_violence
       ON pp_sexual_violence.id = mvf1.id
     LEFT JOIN
-      (SELECT id from mosaic_visit_form_v1 where SexualViolenceServ like '%containment_couns_SV%') as containment_couns_SV
+      (SELECT id from mosaic_mosaic_visit_form_v2 where SexualViolenceServ like '%containment_couns_SV%') as containment_couns_SV
       ON containment_couns_SV.id = mvf1.id
     LEFT JOIN
-      (SELECT id from mosaic_visit_form_v1 where SexualViolenceServ like '%awareness_raising_act%') as awareness_raising_act
+      (SELECT id from mosaic_mosaic_visit_form_v2 where SexualViolenceServ like '%awareness_raising_act%') as awareness_raising_act
       ON awareness_raising_act.id = mvf1.id
     LEFT JOIN
-      (SELECT id from mosaic_visit_form_v1 where SexualViolenceServ like '%pep_info_adherence%') as pep_info_adherence
+      (SELECT id from mosaic_mosaic_visit_form_v2 where SexualViolenceServ like '%pep_info_adherence%') as pep_info_adherence
       ON pep_info_adherence.id = mvf1.id
     LEFT JOIN
-      (SELECT id from mosaic_visit_form_v1 where SexualViolenceServ like '%thuthuzela_info%') as thuthuzela_info
+      (SELECT id from mosaic_mosaic_visit_form_v2 where SexualViolenceServ like '%thuthuzela_info%') as thuthuzela_info
       ON thuthuzela_info.id = mvf1.id
 
 
 -- mencare
     LEFT JOIN
-      (SELECT id from mosaic_visit_form_v1 where ProgProvided like '%mencare_prog%') as pp_mencarep
+      (SELECT id from mosaic_mosaic_visit_form_v2 where ProgProvided like '%mencare_prog%') as pp_mencarep
       ON pp_mencarep.id = mvf1.id
     LEFT JOIN
-      (SELECT id from mosaic_visit_form_v1 where MencServ like '%men_counselling%') as men_counselling
+      (SELECT id from mosaic_mosaic_visit_form_v2 where MencServ like '%men_counselling%') as men_counselling
       ON men_counselling.id = mvf1.id
     LEFT JOIN
-      (SELECT id from mosaic_visit_form_v1 where MencServ like '%group_education%') as group_education
+      (SELECT id from mosaic_mosaic_visit_form_v2 where MencServ like '%group_education%') as group_education
       ON group_education.id = mvf1.id
     LEFT JOIN
-      (SELECT id from mosaic_visit_form_v1 where MencServ like '%comm_campaigns%') as comm_campaigns
+      (SELECT id from mosaic_mosaic_visit_form_v2 where MencServ like '%comm_campaigns%') as comm_campaigns
       ON comm_campaigns.id = mvf1.id
 
 

@@ -18,22 +18,22 @@ FROM
    (
   -- Sexual Violence --
   (SELECT id, 'Sexual Violence' as Program, 'Containment counselling of victims of sexual violence' as Service, UsefulInfo, Impact, OverallRating
-	 FROM mosaic_feedback_form_v1
+	 FROM mosaic_mosaic_feedback_form_v2
 	 WHERE ProgProvided = 'SV_prog' and CourtServ like '%containment_couns_SV%' and date between $P{start_date} and $P{end_date}
   )
   UNION ALL
   (SELECT id, 'Sexual Violence' as Program, 'Awareness raising activities' as Service, UsefulInfo, Impact, OverallRating
-	 FROM mosaic_feedback_form_v1
+	 FROM mosaic_mosaic_feedback_form_v2
 	 WHERE ProgProvided = 'SV_prog' and CourtServ like '%awareness_raising_act%' and date between $P{start_date} and $P{end_date}
   )
   UNION ALL
   (SELECT id, 'Sexual Violence' as Program, 'PEP Information and Adherence' as Service, UsefulInfo, Impact, OverallRating
-	 FROM mosaic_feedback_form_v1
+	 FROM mosaic_mosaic_feedback_form_v2
 	 WHERE ProgProvided = 'SV_prog' and CourtServ like '%pep_info_adherence%' and date between $P{start_date} and $P{end_date}
   )
   UNION ALL
   (SELECT id, 'Sexual Violence' as Program, 'Thuthuzela Care Centre process information' as Service, UsefulInfo, Impact, OverallRating
-	 FROM mosaic_feedback_form_v1
+	 FROM mosaic_mosaic_feedback_form_v2
 	 WHERE ProgProvided = 'SV_prog' and CourtServ like '%thuthuzela_info%' and date between $P{start_date} and $P{end_date}
   )
  ) AS feedback_text

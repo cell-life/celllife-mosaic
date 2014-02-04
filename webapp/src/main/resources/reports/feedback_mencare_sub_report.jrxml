@@ -18,17 +18,17 @@ FROM
    (
   -- Mencare+ --
   (SELECT id, 'Sexual Violence' as Program, 'Counselling' as Service, UsefulInfo, Impact, OverallRating
-	 FROM mosaic_feedback_form_v1
+	 FROM mosaic_mosaic_feedback_form_v2
 	 WHERE ProgProvided = 'mencare_prog' and CourtServ like '%men_counselling%' and date between '2013-01-01' and $P{end_date}
   )
   UNION ALL
   (SELECT id, 'Sexual Violence' as Program, 'Group education with young men on SRHR, gender equality and caregiving' as Service, UsefulInfo, Impact, OverallRating
-	 FROM mosaic_feedback_form_v1
+	 FROM mosaic_mosaic_feedback_form_v2
 	 WHERE ProgProvided = 'mencare_prog' and CourtServ like '%group_education%' and date between '2013-01-01' and $P{end_date}
   )
   UNION ALL
   (SELECT id, 'Sexual Violence' as Program, 'Community campaigns/awareness on mencare+' as Service, UsefulInfo, Impact, OverallRating
-	 FROM mosaic_feedback_form_v1
+	 FROM mosaic_mosaic_feedback_form_v2
 	 WHERE ProgProvided = 'mencare_prog' and CourtServ like '%comm_campaigns%' and date between '2013-01-01' and $P{end_date}
   )
  ) AS feedback_text
