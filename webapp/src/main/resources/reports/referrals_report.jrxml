@@ -19,97 +19,116 @@
 	<queryString>
 		<![CDATA[SELECT
   attendence.PatRefCode as 'client_ref',
- -- court support
- (attendence.allProgProvided like '%court_sup_prog%') as 'court_support_visit', -- 1=referred 0=n/a
- (attendence.allRefBy like '%court_support%') as 'court_support_referral', -- 1=attended, 0/null=not attended
- -- social services
- (attendence.allProgProvided like '%social_serv_prog%') as 'social_serv_visit',
- (attendence.allRefBy = 'social_serv') as 'social_serv_referral',
- -- sexual & reproductive health
- (attendence.allProgProvided like '%SRH_prog%') as 'SRH_visit',
- (attendence.allRefBy = 'SRH') as 'SRH_referral',
--- sexual violence
- (attendence.allProgProvided like '%SV_prog%') as 'SV_visit',
- (attendence.allRefBy = 'SVP') as 'SV_referral',
--- mencare+
- (attendence.allProgProvided like '%mencare_prog%') as 'mencare_visit',
- (attendence.allRefBy = 'mencare') as 'mencare_referral'
+ attendence.referredBy as 'referredBy',
+  -- mosaic clinic
+ (attendence.visitIntReferral like '%mosaic_clinic%') as 'mosaic_clinic_referred', -- 1=referred 0=n/a
+ (attendence.refIntReferral like '%mosaic_clinic%') as 'mosaic_clinic_visited', -- 1=attended, 0/null=not attended
+ -- mosaic counselling
+ (attendence.visitIntReferral like '%mosaic_counselling%') as 'mosaic_counselling_referred',
+ (attendence.refIntReferral like '%mosaic_counselling%') as 'mosaic_counselling_visited',
+ -- hiv test / hct
+ (attendence.visitIntReferral like '%hiv_test_hct%') as 'hiv_test_hct_referred',
+ (attendence.refIntReferral like '%hiv_test_hct%') as 'hiv_test_hct_visited',
+-- workshop
+ (attendence.visitIntReferral like '%workshop%') as 'workshop_referred',
+ (attendence.refIntReferral like '%workshop%') as 'workshop_visited',
+  -- support group
+  (attendence.visitIntReferral like '%support_group%') as 'support_group_referred',
+  (attendence.refIntReferral like '%support_group%') as 'support_group_visited',
+-- mencare
+ (attendence.visitIntReferral like '%mencare%') as 'mencare_referred',
+ (attendence.refIntReferral like '%mencare%') as 'mencare_visited'
 FROM
  (
-SELECT mvf1.PatRefCode, mvf1.ProgProvided as allProgProvided, GROUP_CONCAT(mrf1.RefBy, ' ') as allRefBy
-FROM mosaic_visit_form_v1 mvf1
-  LEFT JOIN mosaic_referral_form_v1 mrf1 on
-    (((mrf1.IdNum = mvf1.IdNum) or (mrf1.PassNum = mvf1.PassNum))
-       or ((mrf1.IdNum = null or mvf1.IdNum = null) and (mrf1.PassNum = null or mvf1.PassNum = null) and (mrf1.PatRefCode = mvf1.PatRefCode)))
+SELECT mvf2.PatRefCode, mrf2.refBy as referredBy, mvf2.IntReferral as visitIntReferral, GROUP_CONCAT(mrf2.IntReferral, ' ') as refIntReferral
+FROM mosaic_mosaic_visit_form_v2 mvf2
+  LEFT JOIN mosaic_mosaic_referral_form_v2 mrf2 on
+    (((mrf2.IdNum = mvf2.IdNum) or (mrf2.PassNum = mvf2.PassNum))
+    or ((mrf2.IdNum = null or mvf2.IdNum = null) and (mrf2.PassNum = null or mvf2.PassNum = null) and (mrf2.PatRefCode = mvf2.PatRefCode)))
 WHERE
- mvf1.date between $P{start_date} and $P{end_date}
-GROUP BY mvf1.id
+mvf2.date between $P{start_date} and $P{end_date}
+GROUP BY mvf2.id
  ) as attendence;]]>
 	</queryString>
 	<field name="client_ref" class="java.lang.String"/>
-	<field name="court_support_visit" class="java.lang.Number"/>
-	<field name="court_support_referral" class="java.lang.Number"/>
-	<field name="social_serv_visit" class="java.lang.Number"/>
-	<field name="social_serv_referral" class="java.lang.Number"/>
-	<field name="SRH_visit" class="java.lang.Number"/>
-	<field name="SRH_referral" class="java.lang.Number"/>
-	<field name="SV_visit" class="java.lang.Number"/>
-	<field name="SV_referral" class="java.lang.Number"/>
-	<field name="mencare_visit" class="java.lang.Number"/>
-	<field name="mencare_referral" class="java.lang.Number"/>
-	<variable name="court_support_total" class="java.lang.Number" calculation="Sum">
-		<variableExpression><![CDATA[$F{court_support_visit}]]></variableExpression>
+	<field name="referredBy" class="java.lang.String"/>
+	<field name="mosaic_clinic_referred" class="java.lang.Number"/>
+	<field name="mosaic_clinic_visited" class="java.lang.Number"/>
+	<field name="mosaic_counselling_referred" class="java.lang.Number"/>
+	<field name="mosaic_counselling_visited" class="java.lang.Number"/>
+	<field name="hiv_test_hct_referred" class="java.lang.Number"/>
+	<field name="hiv_test_hct_visited" class="java.lang.Number"/>
+	<field name="workshop_referred" class="java.lang.Number"/>
+	<field name="workshop_visited" class="java.lang.Number"/>
+	<field name="support_group_referred" class="java.lang.Number"/>
+	<field name="support_group_visited" class="java.lang.Number"/>
+	<field name="mencare_referred" class="java.lang.Number"/>
+	<field name="mencare_visited" class="java.lang.Number"/>
+	<variable name="mosaic_clinic_total" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{mosaic_clinic_referred}]]></variableExpression>
 	</variable>
-	<variable name="court_support_attended" class="java.lang.Number" calculation="Sum">
-		<variableExpression><![CDATA[$F{court_support_referral}]]></variableExpression>
+	<variable name="mosaic_clinic_attended" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{mosaic_clinic_visited}]]></variableExpression>
 	</variable>
-	<variable name="court_support_notattended" class="java.lang.Number">
-		<variableExpression><![CDATA[$V{court_support_total} - $V{court_support_attended}]]></variableExpression>
+	<variable name="mosaic_clinic_notattended" class="java.lang.Number">
+		<variableExpression><![CDATA[$V{mosaic_clinic_total} - $V{mosaic_clinic_attended}]]></variableExpression>
 	</variable>
-	<variable name="court_support_percentage" class="java.lang.Float">
-		<variableExpression><![CDATA[new Float($V{court_support_attended}.floatValue()/$V{court_support_total}.floatValue())]]></variableExpression>
+	<variable name="mosaic_clinic_percentage" class="java.lang.Float">
+		<variableExpression><![CDATA[new Float($V{mosaic_clinic_attended}.floatValue()/$V{mosaic_clinic_total}.floatValue())]]></variableExpression>
 	</variable>
-	<variable name="social_serv_total" class="java.lang.Number" calculation="Sum">
-		<variableExpression><![CDATA[$F{social_serv_visit}]]></variableExpression>
+	<variable name="mosaic_counselling_total" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{mosaic_counselling_referred}]]></variableExpression>
 	</variable>
-	<variable name="social_serv_attended" class="java.lang.Number" calculation="Sum">
-		<variableExpression><![CDATA[$F{social_serv_referral}]]></variableExpression>
+	<variable name="mosaic_counselling_attended" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{mosaic_counselling_visited}]]></variableExpression>
 	</variable>
-	<variable name="social_serv_notattended" class="java.lang.Number">
-		<variableExpression><![CDATA[$V{social_serv_total} - $V{social_serv_attended}]]></variableExpression>
+	<variable name="mosaic_counselling_notattended" class="java.lang.Number">
+		<variableExpression><![CDATA[$V{mosaic_counselling_total} - $V{mosaic_counselling_attended}]]></variableExpression>
 	</variable>
-	<variable name="social_serv_percentage" class="java.lang.Float">
-		<variableExpression><![CDATA[new Float($V{social_serv_attended}.floatValue()/$V{social_serv_total}.floatValue())]]></variableExpression>
+	<variable name="mosaic_counselling_percentage" class="java.lang.Float">
+		<variableExpression><![CDATA[new Float($V{mosaic_counselling_attended}.floatValue()/$V{mosaic_counselling_total}.floatValue())]]></variableExpression>
 	</variable>
-	<variable name="SRH_total" class="java.lang.Number" calculation="Sum">
-		<variableExpression><![CDATA[$F{SRH_visit}]]></variableExpression>
+	<variable name="hiv_test_hct_total" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{hiv_test_hct_referred}]]></variableExpression>
 	</variable>
-	<variable name="SRH_attended" class="java.lang.Number" calculation="Sum">
-		<variableExpression><![CDATA[$F{SRH_referral}]]></variableExpression>
+	<variable name="hiv_test_hct_attended" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{hiv_test_hct_visited}]]></variableExpression>
 	</variable>
-	<variable name="SRH_notattended" class="java.lang.Number">
-		<variableExpression><![CDATA[$V{SRH_total} - $V{SRH_attended}]]></variableExpression>
+	<variable name="hiv_test_hct_notattended" class="java.lang.Number">
+		<variableExpression><![CDATA[$V{hiv_test_hct_total} - $V{hiv_test_hct_attended}]]></variableExpression>
 	</variable>
-	<variable name="SRH_percentage" class="java.lang.Float">
-		<variableExpression><![CDATA[new Float($V{SRH_attended}.floatValue()/$V{SRH_total}.floatValue())]]></variableExpression>
+	<variable name="hiv_test_hct_percentage" class="java.lang.Float">
+		<variableExpression><![CDATA[new Float($V{hiv_test_hct_attended}.floatValue()/$V{hiv_test_hct_total}.floatValue())]]></variableExpression>
 	</variable>
-	<variable name="SV_total" class="java.lang.Number" calculation="Sum">
-		<variableExpression><![CDATA[$F{SV_visit}]]></variableExpression>
+	<variable name="workshop_total" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{workshop_referred}]]></variableExpression>
 	</variable>
-	<variable name="SV_attended" class="java.lang.Number" calculation="Sum">
-		<variableExpression><![CDATA[$F{SV_referral}]]></variableExpression>
+	<variable name="workshop_attended" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{workshop_visited}]]></variableExpression>
 	</variable>
-	<variable name="SV_notattended" class="java.lang.Number">
-		<variableExpression><![CDATA[$V{SV_total} - $V{SV_attended}]]></variableExpression>
+	<variable name="workshop_notattended" class="java.lang.Number">
+		<variableExpression><![CDATA[$V{workshop_total} - $V{workshop_attended}]]></variableExpression>
 	</variable>
-	<variable name="SV_percentage" class="java.lang.Float">
-		<variableExpression><![CDATA[new Float($V{SV_attended}.floatValue()/$V{SV_total}.floatValue())]]></variableExpression>
+	<variable name="workshop_percentage" class="java.lang.Float">
+		<variableExpression><![CDATA[new Float($V{workshop_attended}.floatValue()/$V{workshop_total}.floatValue())]]></variableExpression>
+	</variable>
+	<variable name="support_group_total" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{support_group_referred}]]></variableExpression>
+	</variable>
+	<variable name="support_group_attended" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{support_group_visited}]]></variableExpression>
+	</variable>
+	<variable name="support_group_notattended" class="java.lang.Number">
+		<variableExpression><![CDATA[$V{support_group_total} - $V{support_group_attended}]]></variableExpression>
+	</variable>
+	<variable name="support_group_percentage" class="java.lang.Float">
+		<variableExpression><![CDATA[new Float($V{support_group_attended}.floatValue()/$V{support_group_total}.floatValue())]]></variableExpression>
 	</variable>
 	<variable name="mencare_total" class="java.lang.Number" calculation="Sum">
-		<variableExpression><![CDATA[$F{mencare_visit}]]></variableExpression>
+		<variableExpression><![CDATA[$F{mencare_referred}]]></variableExpression>
 	</variable>
 	<variable name="mencare_attended" class="java.lang.Number" calculation="Sum">
-		<variableExpression><![CDATA[$F{mencare_referral}]]></variableExpression>
+		<variableExpression><![CDATA[$F{mencare_visited}]]></variableExpression>
 	</variable>
 	<variable name="mencare_notattended" class="java.lang.Number">
 		<variableExpression><![CDATA[$V{mencare_total} - $V{mencare_attended}]]></variableExpression>
@@ -120,18 +139,18 @@ GROUP BY mvf1.id
 	<title>
 		<band height="130" splitType="Stretch">
 			<staticText>
-				<reportElement style="report_title" mode="Transparent" x="1" y="84" width="555" height="46"/>
+				<reportElement style="report_title" mode="Transparent" x="1" y="84" width="555" height="46" uuid="7a9ac474-6007-4e2c-9dd8-9de774ff5777"/>
 				<textElement verticalAlignment="Middle">
 					<font size="14"/>
 				</textElement>
 				<text><![CDATA[MOSAIC: Summary report of attended Programs]]></text>
 			</staticText>
 			<image>
-				<reportElement stretchType="RelativeToBandHeight" x="1" y="1" width="82" height="82"/>
+				<reportElement stretchType="RelativeToBandHeight" x="1" y="1" width="82" height="82" uuid="304f73ac-f360-4d99-8c9e-a27232294347"/>
 				<imageExpression><![CDATA[$P{SUBREPORT_DIR} + "mosaic-logo.jpg"]]></imageExpression>
 			</image>
 			<textField pattern="EEE, d MMM yyyy HH:mm">
-				<reportElement x="412" y="1" width="141" height="20"/>
+				<reportElement x="412" y="1" width="141" height="20" uuid="a27ebd32-fc43-4cc0-81b2-15182a234bdd"/>
 				<box leftPadding="5"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
@@ -139,7 +158,7 @@ GROUP BY mvf1.id
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="298" y="1" width="114" height="20"/>
+				<reportElement x="298" y="1" width="114" height="20" uuid="1fd267b0-5596-4551-a5f8-ca714f535d14"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
@@ -151,35 +170,34 @@ GROUP BY mvf1.id
 		<band height="67">
 			<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
 			<rectangle>
-				<reportElement x="1" y="1" width="553" height="35" backcolor="#EEEEEE"/>
+				<reportElement x="1" y="1" width="553" height="35" backcolor="#EEEEEE" uuid="d83cac1f-42e7-415c-98df-89975e77f54f"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="14" y="11" width="53" height="15"/>
+				<reportElement x="14" y="11" width="53" height="15" uuid="a5c9254c-489b-4e77-bd40-2456cc895454"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Date:]]></text>
 			</staticText>
 			<textField pattern="dd MMMMM yyyy">
-				<reportElement x="87" y="11" width="111" height="15"/>
+				<reportElement x="87" y="11" width="111" height="15" uuid="f522d4bd-ceff-4988-88ff-0171ad540e4d"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{start_date}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="198" y="11" width="17" height="15"/>
+				<reportElement x="198" y="11" width="17" height="15" uuid="6d398696-9d89-40de-8890-e6a0eabaed54"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[to]]></text>
 			</staticText>
 			<textField pattern="dd MMMMM yyyy">
-				<reportElement x="215" y="11" width="111" height="15"/>
+				<reportElement x="215" y="11" width="111" height="15" uuid="fd0085de-f602-4709-9e82-3970c5d09b5e"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{end_date}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="1" y="46" width="100" height="20"/>
-				<textElement/>
+				<reportElement x="1" y="46" width="100" height="20" uuid="02c3d8dc-4775-42ad-9f0f-7c64d14074b3"/>
 				<text><![CDATA[Individual List]]></text>
 			</staticText>
 		</band>
@@ -187,7 +205,7 @@ GROUP BY mvf1.id
 	<columnHeader>
 		<band height="47" splitType="Stretch">
 			<staticText>
-				<reportElement x="1" y="0" width="88" height="47"/>
+				<reportElement x="1" y="0" width="66" height="47" uuid="aa34fa83-3fbf-407f-a501-167fc3878219"/>
 				<box topPadding="5" leftPadding="5">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -196,12 +214,12 @@ GROUP BY mvf1.id
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement>
-					<font size="12" isBold="true"/>
+					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Client Ref]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="275" y="0" width="93" height="47"/>
+				<reportElement x="188" y="0" width="77" height="47" uuid="dbb4b2a9-61da-4919-842c-82a9b2234e1e"/>
 				<box topPadding="5" leftPadding="5">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -212,10 +230,10 @@ GROUP BY mvf1.id
 				<textElement textAlignment="Center">
 					<font size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Sexual & Reproductive Health]]></text>
+				<text><![CDATA[Mosaic Counselling]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="368" y="0" width="93" height="47"/>
+				<reportElement x="265" y="0" width="66" height="47" uuid="c33c9dfb-049c-4f18-925b-65793ceaa73b"/>
 				<box topPadding="5" leftPadding="2">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -226,56 +244,84 @@ GROUP BY mvf1.id
 				<textElement textAlignment="Center">
 					<font size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Sexual Violence]]></text>
+				<text><![CDATA[HIV Test / Hct]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="461" y="0" width="93" height="47"/>
+				<reportElement x="128" y="0" width="60" height="47" uuid="11dd0312-27d8-4ea3-b35c-7c2372ad52f0"/>
 				<box topPadding="5" leftPadding="5">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
 					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Mosaic Clinic]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="331" y="0" width="66" height="47" uuid="c02a0fce-e305-4152-b598-0c60cce82b22"/>
+				<box topPadding="5" leftPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Workshop]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="67" y="0" width="61" height="47" uuid="c9485076-81b2-481f-92a2-e01437900775"/>
+				<box topPadding="5" leftPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Referred By]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="397" y="0" width="74" height="47" uuid="df02afbb-cc0d-4417-8882-453eaf654816"/>
+				<box topPadding="5" leftPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Support Group]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="471" y="0" width="83" height="47" uuid="0eee1318-6da4-4c96-8c70-6a9de47f9489"/>
+				<box topPadding="5" leftPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Mencare+]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="182" y="0" width="93" height="47"/>
-				<box topPadding="5" leftPadding="5">
-					<pen lineWidth="0.5"/>
-					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.0"/>
-					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
-				</box>
-				<textElement textAlignment="Center">
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Social services]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="89" y="0" width="93" height="47"/>
-				<box topPadding="5" leftPadding="5">
-					<pen lineWidth="0.5"/>
-					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.0"/>
-					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
-				</box>
-				<textElement textAlignment="Center">
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Court support]]></text>
-			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="13" splitType="Stretch">
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement x="89" y="0" width="93" height="13"/>
+				<reportElement x="67" y="0" width="61" height="13" uuid="9af32e00-353c-45c3-85a8-1e3c78103e9d"/>
 				<box leftPadding="0">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -286,10 +332,10 @@ GROUP BY mvf1.id
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{court_support_visit} == 0 ? "-" : ($F{court_support_referral} != null && $F{court_support_referral} == 1 ? "Y" : "N"))]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{referredBy}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement x="182" y="0" width="93" height="13"/>
+				<reportElement x="128" y="0" width="60" height="13" uuid="be377909-19f2-421b-87a0-34d0b61a5fcf"/>
 				<box leftPadding="0">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -300,10 +346,10 @@ GROUP BY mvf1.id
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{social_serv_visit} == 0 ? "-" : ($F{social_serv_referral} != null && $F{social_serv_referral} == 1 ? "Y" : "N"))]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{mosaic_clinic_referred} == 0 ? "-" : ($F{mosaic_clinic_visited} != null && $F{mosaic_clinic_visited} == 1 ? "Y" : "N"))]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement x="275" y="0" width="93" height="13"/>
+				<reportElement x="188" y="0" width="77" height="13" uuid="860f8bee-2432-485d-a41e-0cde12e69b43"/>
 				<box leftPadding="0">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -314,10 +360,10 @@ GROUP BY mvf1.id
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{SRH_visit} == 0 ? "-" : ($F{SRH_referral} != null && $F{SRH_referral} == 1 ? "Y" : "N"))]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{mosaic_counselling_referred} == 0 ? "-" : ($F{mosaic_counselling_visited} != null && $F{mosaic_counselling_visited} == 1 ? "Y" : "N"))]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement x="368" y="0" width="93" height="13"/>
+				<reportElement x="265" y="0" width="66" height="13" uuid="91d5ed5d-7578-49b4-a77a-90575640f39a"/>
 				<box leftPadding="0">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -328,10 +374,10 @@ GROUP BY mvf1.id
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{SV_visit} == 0 ? "-" : ($F{SV_referral} != null && $F{SV_referral} == 1 ? "Y" : "N"))]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{hiv_test_hct_referred} == 0 ? "-" : ($F{hiv_test_hct_visited} != null && $F{hiv_test_hct_visited} == 1 ? "Y" : "N"))]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement x="461" y="0" width="93" height="13"/>
+				<reportElement x="331" y="0" width="66" height="13" uuid="51c211fd-eaa6-48ea-9f3b-01ee9e70d4d9"/>
 				<box leftPadding="0">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -342,10 +388,10 @@ GROUP BY mvf1.id
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{mencare_visit} == 0 ? "-" : ($F{mencare_referral} != null && $F{mencare_referral} == 1 ? "Y" : "N"))]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{workshop_referred} == 0 ? "-" : ($F{workshop_visited} != null && $F{workshop_visited} == 1 ? "Y" : "N"))]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0;-###0" isBlankWhenNull="true">
-				<reportElement x="1" y="0" width="88" height="13"/>
+				<reportElement x="1" y="0" width="66" height="13" uuid="2f145274-7bcf-49e2-a568-5d53ea735189"/>
 				<box leftPadding="0">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -358,16 +404,44 @@ GROUP BY mvf1.id
 				</textElement>
 				<textFieldExpression><![CDATA[$F{client_ref}]]></textFieldExpression>
 			</textField>
+			<textField pattern="###0;-###0" isBlankWhenNull="true">
+				<reportElement x="471" y="0" width="83" height="13" uuid="8d3bc93d-e759-4375-a70c-71938fdb106d"/>
+				<box leftPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{mencare_referred} == 0 ? "-" : ($F{mencare_visited} != null && $F{mencare_visited} == 1 ? "Y" : "N"))]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="397" y="0" width="74" height="13" uuid="ebe0c3ac-605b-49eb-b4db-a04482175c2a"/>
+				<box leftPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{support_group_referred} == 0 ? "-" : ($F{support_group_visited} != null && $F{support_group_visited} == 1 ? "Y" : "N"))]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 	<pageFooter>
 		<band height="52" splitType="Stretch">
 			<image>
-				<reportElement x="0" y="11" width="128" height="40"/>
+				<reportElement x="0" y="11" width="128" height="40" uuid="5a1f5825-fbc1-423a-98d1-f021b2cb0b7e"/>
 				<imageExpression><![CDATA[$P{SUBREPORT_DIR} + "cell-life.png"]]></imageExpression>
 			</image>
 			<textField isBlankWhenNull="false">
-				<reportElement key="textField-5" x="399" y="31" width="80" height="20"/>
+				<reportElement key="textField-5" x="399" y="31" width="80" height="20" uuid="0921f2ae-05e8-4912-9d60-d803116787b5"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -380,7 +454,7 @@ GROUP BY mvf1.id
 				<textFieldExpression><![CDATA["Page " + String.valueOf($V{PAGE_NUMBER}) + " of"]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Report" isBlankWhenNull="false">
-				<reportElement key="textField-4" x="480" y="31" width="75" height="20"/>
+				<reportElement key="textField-4" x="480" y="31" width="75" height="20" uuid="ba059d3f-45db-48bc-88e4-6f427a37098f"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -397,15 +471,14 @@ GROUP BY mvf1.id
 	<summary>
 		<band height="317">
 			<rectangle>
-				<reportElement x="1" y="132" width="553" height="35" backcolor="#EEEEEE"/>
+				<reportElement x="1" y="132" width="553" height="35" backcolor="#EEEEEE" uuid="50dac118-5bbb-4646-89d3-89293fde9174"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="0" y="186" width="100" height="20"/>
-				<textElement/>
+				<reportElement x="0" y="186" width="100" height="20" uuid="85621946-935f-408d-a216-fcc8a4da0281"/>
 				<text><![CDATA[Aggregated List]]></text>
 			</staticText>
 			<textField pattern="#,##0.00 %" isBlankWhenNull="true">
-				<reportElement x="89" y="295" width="93" height="21"/>
+				<reportElement x="78" y="295" width="77" height="21" uuid="146ed716-8225-4f27-8216-c7fd0d9a5428"/>
 				<box leftPadding="0">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -416,10 +489,10 @@ GROUP BY mvf1.id
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{court_support_percentage}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{mosaic_clinic_notattended} == 0 ? "0 %" : $V{mosaic_clinic_percentage}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="1" y="295" width="88" height="21"/>
+				<reportElement x="1" y="295" width="77" height="21" uuid="7f5507be-08a0-4227-abe4-a3a8a5afba29"/>
 				<box topPadding="5" leftPadding="5">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -433,7 +506,7 @@ GROUP BY mvf1.id
 				<text><![CDATA[Attended %]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="1" y="274" width="88" height="21"/>
+				<reportElement x="1" y="274" width="77" height="21" uuid="11bd12e4-aa82-470d-8fef-e8592752eb12"/>
 				<box topPadding="5" leftPadding="5">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -447,7 +520,7 @@ GROUP BY mvf1.id
 				<text><![CDATA[Unattended]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="275" y="206" width="93" height="47"/>
+				<reportElement x="232" y="206" width="77" height="47" uuid="95a5aba2-583a-4e23-a8ef-ab4a9a3fd7f4"/>
 				<box topPadding="5" leftPadding="5">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -458,10 +531,10 @@ GROUP BY mvf1.id
 				<textElement textAlignment="Center">
 					<font size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Sexual & Reproductive Health]]></text>
+				<text><![CDATA[HIV Test Total]]></text>
 			</staticText>
 			<textField pattern="#,##0.00 %" isBlankWhenNull="true">
-				<reportElement x="275" y="295" width="93" height="21"/>
+				<reportElement x="155" y="295" width="77" height="21" uuid="1316381e-19dd-4e6b-bbb9-c58f5e94a26b"/>
 				<box leftPadding="0">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -470,26 +543,12 @@ GROUP BY mvf1.id
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8"/>
+					<font fontName="SansSerif" size="8" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{SRH_percentage}]]></textFieldExpression>
-			</textField>
-			<textField pattern="#,##0.00 %" isBlankWhenNull="true">
-				<reportElement x="182" y="295" width="93" height="21"/>
-				<box leftPadding="0">
-					<pen lineWidth="0.5"/>
-					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.5"/>
-					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{social_serv_percentage}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{mosaic_counselling_notattended} == 0 ? "0 %" : $V{mosaic_counselling_percentage}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="182" y="206" width="93" height="47"/>
+				<reportElement x="155" y="206" width="77" height="47" uuid="d15a4934-f16d-40dc-a2af-01c664a64bed"/>
 				<box topPadding="5" leftPadding="5">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -500,10 +559,10 @@ GROUP BY mvf1.id
 				<textElement textAlignment="Center">
 					<font size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Social services]]></text>
+				<text><![CDATA[Mosaic Counselling Total]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="368" y="206" width="93" height="47"/>
+				<reportElement x="309" y="206" width="77" height="47" uuid="a6e1a4d6-c4e6-462c-b466-eff63cca0cad"/>
 				<box topPadding="5" leftPadding="2">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -514,10 +573,10 @@ GROUP BY mvf1.id
 				<textElement textAlignment="Center">
 					<font size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Sexual Violence]]></text>
+				<text><![CDATA[Workshop Total]]></text>
 			</staticText>
 			<textField pattern="###0;-###0" isBlankWhenNull="true">
-				<reportElement x="461" y="274" width="93" height="21"/>
+				<reportElement x="386" y="274" width="77" height="22" uuid="bae9139c-5e7d-405f-8334-ca0d3513ba0f"/>
 				<box leftPadding="0">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -528,10 +587,10 @@ GROUP BY mvf1.id
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{mencare_notattended}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{support_group_notattended}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0;-###0" isBlankWhenNull="true">
-				<reportElement x="275" y="253" width="93" height="21"/>
+				<reportElement x="232" y="253" width="77" height="21" uuid="4fe7c3e5-f1f9-4db4-8245-3ed602d7d918"/>
 				<box leftPadding="0">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -542,10 +601,10 @@ GROUP BY mvf1.id
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{SRH_attended}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{hiv_test_hct_attended}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0;-###0" isBlankWhenNull="true">
-				<reportElement x="182" y="274" width="93" height="21"/>
+				<reportElement x="155" y="274" width="77" height="21" uuid="ada9c63b-aa08-42a9-992d-6879e22896c1"/>
 				<box leftPadding="0">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -556,10 +615,10 @@ GROUP BY mvf1.id
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{social_serv_notattended}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{mosaic_counselling_notattended}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0;-###0" isBlankWhenNull="true">
-				<reportElement x="275" y="274" width="93" height="21"/>
+				<reportElement x="232" y="274" width="77" height="22" uuid="b5547d13-3eb2-408f-bd54-2a56b8d1d8b5"/>
 				<box leftPadding="0">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -570,10 +629,10 @@ GROUP BY mvf1.id
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{SRH_notattended}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{hiv_test_hct_notattended}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00 %" isBlankWhenNull="true">
-				<reportElement x="461" y="295" width="93" height="21"/>
+				<reportElement x="386" y="296" width="76" height="20" uuid="e226c42b-d102-418e-8fe5-9fca1163ccf4"/>
 				<box leftPadding="0">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -584,10 +643,10 @@ GROUP BY mvf1.id
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{mencare_percentage}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{support_group_notattended} == 0 ? "0 %" : $V{support_group_percentage}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="89" y="206" width="93" height="47"/>
+				<reportElement x="78" y="206" width="77" height="47" uuid="ef014e4b-b949-489b-9add-cc400c431d86"/>
 				<box topPadding="5" leftPadding="5">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -598,10 +657,10 @@ GROUP BY mvf1.id
 				<textElement textAlignment="Center">
 					<font size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Court support]]></text>
+				<text><![CDATA[Mosaic Clinic Total]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="1" y="206" width="88" height="47"/>
+				<reportElement x="1" y="206" width="77" height="47" uuid="8ee3e2e5-8aa2-4e0e-8c8d-867e12860dca"/>
 				<box topPadding="5" leftPadding="5">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -615,7 +674,7 @@ GROUP BY mvf1.id
 				<text><![CDATA[TOTAL]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="1" y="253" width="88" height="21"/>
+				<reportElement x="1" y="253" width="77" height="21" uuid="06cd7915-0350-4792-97ef-0c6afc462a51"/>
 				<box topPadding="5" leftPadding="5">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -629,7 +688,7 @@ GROUP BY mvf1.id
 				<text><![CDATA[Attended]]></text>
 			</staticText>
 			<textField pattern="#,##0.00 %" isBlankWhenNull="true">
-				<reportElement x="368" y="295" width="93" height="21"/>
+				<reportElement x="309" y="296" width="77" height="20" uuid="e1fc0c1d-4388-498f-aba9-e63bc9f46605"/>
 				<box leftPadding="0">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -640,10 +699,10 @@ GROUP BY mvf1.id
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{SV_percentage}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{workshop_notattended} == 0 ? "0 %" : $V{workshop_percentage}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0;-###0" isBlankWhenNull="true">
-				<reportElement x="368" y="253" width="93" height="21"/>
+				<reportElement x="309" y="253" width="77" height="21" uuid="5a13406e-bd91-4e23-80ca-a4e6959ea646"/>
 				<box leftPadding="0">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -654,10 +713,10 @@ GROUP BY mvf1.id
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{SV_attended}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{workshop_attended}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0;-###0" isBlankWhenNull="true">
-				<reportElement x="368" y="274" width="93" height="21"/>
+				<reportElement x="309" y="274" width="77" height="22" uuid="c6fe2a40-776d-4b3c-9490-6f7a221c2547"/>
 				<box leftPadding="0">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -668,10 +727,10 @@ GROUP BY mvf1.id
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{SV_notattended}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{workshop_notattended}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0;-###0" isBlankWhenNull="true">
-				<reportElement x="89" y="274" width="93" height="21"/>
+				<reportElement x="78" y="274" width="77" height="21" uuid="bec44f97-b713-4d65-9451-d43fbe16088a"/>
 				<box leftPadding="0">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -682,10 +741,10 @@ GROUP BY mvf1.id
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{court_support_notattended}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{mosaic_clinic_notattended}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0;-###0" isBlankWhenNull="true">
-				<reportElement x="89" y="253" width="93" height="21"/>
+				<reportElement x="78" y="253" width="77" height="21" uuid="edad8fb9-18eb-40b8-a38f-d40d8842a0d6"/>
 				<box leftPadding="0">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -696,10 +755,10 @@ GROUP BY mvf1.id
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{court_support_attended}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{mosaic_clinic_attended}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0;-###0" isBlankWhenNull="true">
-				<reportElement x="461" y="253" width="93" height="21"/>
+				<reportElement x="386" y="253" width="77" height="21" uuid="d930b8be-0444-479b-a1b6-20f43d6bd554"/>
 				<box leftPadding="0">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -710,10 +769,10 @@ GROUP BY mvf1.id
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{mencare_attended}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{support_group_attended}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="461" y="206" width="93" height="47"/>
+				<reportElement x="386" y="206" width="77" height="47" uuid="7075ee28-ffb8-4af0-b6b5-feea362521e6"/>
 				<box topPadding="5" leftPadding="5">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -724,35 +783,21 @@ GROUP BY mvf1.id
 				<textElement textAlignment="Center">
 					<font size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Mencare+]]></text>
+				<text><![CDATA[Support Group Total]]></text>
 			</staticText>
-			<textField pattern="###0;-###0" isBlankWhenNull="true">
-				<reportElement x="182" y="253" width="93" height="21"/>
-				<box leftPadding="0">
-					<pen lineWidth="0.5"/>
-					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.5"/>
-					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{social_serv_attended}]]></textFieldExpression>
-			</textField>
 			<staticText>
-				<reportElement style="report_title" mode="Transparent" x="1" y="86" width="555" height="46"/>
+				<reportElement style="report_title" mode="Transparent" x="1" y="86" width="555" height="46" uuid="853bc320-2f2d-48e7-bae9-8066ed91bc48"/>
 				<textElement verticalAlignment="Middle">
 					<font size="14"/>
 				</textElement>
 				<text><![CDATA[MOSAIC: Summary report of attended Programs]]></text>
 			</staticText>
 			<image>
-				<reportElement stretchType="RelativeToBandHeight" x="1" y="1" width="82" height="82"/>
+				<reportElement stretchType="RelativeToBandHeight" x="1" y="1" width="82" height="82" uuid="2253dcfd-9a63-4dd5-8a21-8be20295cc00"/>
 				<imageExpression><![CDATA[$P{SUBREPORT_DIR} + "mosaic-logo.jpg"]]></imageExpression>
 			</image>
 			<textField pattern="EEE, d MMM yyyy HH:mm">
-				<reportElement x="412" y="4" width="141" height="20"/>
+				<reportElement x="412" y="4" width="141" height="20" uuid="a9224eeb-8f69-41b5-bad5-24cdf56c3409"/>
 				<box leftPadding="5"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
@@ -760,35 +805,112 @@ GROUP BY mvf1.id
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="298" y="4" width="114" height="20"/>
+				<reportElement x="298" y="4" width="114" height="20" uuid="47815212-c4db-416d-a7c5-83a1440716a3"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<text><![CDATA[Report generated on:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="14" y="143" width="53" height="15"/>
+				<reportElement x="14" y="143" width="53" height="15" uuid="84bda823-ea7d-4a20-a12d-4a8a7749a54f"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Date:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="198" y="143" width="17" height="15"/>
+				<reportElement x="198" y="143" width="17" height="15" uuid="fd4ce0e6-59c7-4adc-8f94-b7070ccab6e1"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[to]]></text>
 			</staticText>
 			<textField pattern="dd MMMMM yyyy">
-				<reportElement x="215" y="143" width="111" height="15"/>
+				<reportElement x="215" y="143" width="111" height="15" uuid="539d35f4-6433-4c55-a26b-5b7805d83cef"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{end_date}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd MMMMM yyyy">
-				<reportElement x="88" y="143" width="111" height="15"/>
+				<reportElement x="88" y="143" width="111" height="15" uuid="88ac8d2c-bf24-4c51-aedc-10127b9f619a"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{start_date}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="462" y="206" width="92" height="47" uuid="4af0f0cd-0e3f-4ea0-9d45-acaa1de398f2"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Mencare+ Total]]></text>
+			</staticText>
+			<textField pattern="###0;-###0">
+				<reportElement x="462" y="253" width="92" height="21" uuid="d8f30a1b-f52b-457a-82b9-7c0a606358a3"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{mencare_attended}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00 %">
+				<reportElement x="232" y="296" width="77" height="20" uuid="43140834-1445-48a1-b580-e81525430109"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{hiv_test_hct_attended} == 0 ? "0 %" : $V{hiv_test_hct_percentage}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0;-###0">
+				<reportElement x="462" y="274" width="92" height="22" uuid="ac69889f-ced0-4cf4-b8d6-d1bc9209f989"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{mencare_notattended}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00 %">
+				<reportElement x="462" y="296" width="92" height="20" uuid="79e1d846-cd0d-4fe6-aa18-be4173dfcf65"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{mencare_notattended} == 0 ? "0 %" : $V{mencare_percentage}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0;-###0">
+				<reportElement x="155" y="253" width="77" height="20" uuid="6aac571a-ab27-4a4e-8c71-facc13941b92"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{mosaic_counselling_attended}]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>
