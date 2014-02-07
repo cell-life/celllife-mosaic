@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="referrals_report" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryNewPage="true" isSummaryWithPageHeaderAndFooter="true">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="288"/>
+	<property name="ireport.y" value="160"/>
 	<template><![CDATA[$P{SUBREPORT_DIR} + "report_style_template.jrtx"]]></template>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
@@ -40,7 +40,7 @@
  (attendence.refIntReferral like '%mencare%') as 'mencare_visited'
 FROM
  (
-SELECT mvf2.PatRefCode, mrf2.refBy as referredBy, mvf2.IntReferral as visitIntReferral, GROUP_CONCAT(mrf2.IntReferral, ' ') as refIntReferral
+SELECT mvf2.PatRefCode, mvf2.refBy as referredBy, mvf2.IntReferral as visitIntReferral, GROUP_CONCAT(mrf2.IntReferral, ' ') as refIntReferral
 FROM mosaic_mosaic_visit_form_v2 mvf2
   LEFT JOIN mosaic_mosaic_referral_form_v2 mrf2 on
     (((mrf2.IdNum = mvf2.IdNum) or (mrf2.PassNum = mvf2.PassNum))
@@ -223,7 +223,7 @@ GROUP BY mvf2.id
 				<box topPadding="5" leftPadding="5">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
 					<rightPen lineWidth="0.5"/>
 				</box>
@@ -332,7 +332,7 @@ GROUP BY mvf2.id
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{referredBy}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{referredBy} == "mencare" ? "Mencare+" : ($F{referredBy} == "social_serv" ? "Social Services" : ($F{referredBy} == "court_support" ? "Court Support" : ($F{referredBy} == "SRH" ? "SRHP" : $F{referredBy} == "external_org" ? "External Org" : ($F{referredBy} == "hct" ? "HCT" : ($F{referredBy} == "self_referral" ? "Self Referral" : $F{referredBy})))))]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
 				<reportElement x="128" y="0" width="60" height="13" uuid="be377909-19f2-421b-87a0-34d0b61a5fcf"/>
