@@ -65,10 +65,10 @@ GROUP BY mvf2.id
 	<field name="mencare_referred" class="java.lang.Number"/>
 	<field name="mencare_visited" class="java.lang.Number"/>
 	<variable name="mosaic_clinic_total" class="java.lang.Number" calculation="Sum">
-		<variableExpression><![CDATA[$F{mosaic_clinic_referred}]]></variableExpression>
+		<variableExpression><![CDATA[$F{mosaic_clinic_referred} == null ? 0 : $F{mosaic_clinic_referred}]]></variableExpression>
 	</variable>
 	<variable name="mosaic_clinic_attended" class="java.lang.Number" calculation="Sum">
-		<variableExpression><![CDATA[$F{mosaic_clinic_visited}]]></variableExpression>
+		<variableExpression><![CDATA[$F{mosaic_clinic_visited} == null ? 0 : $F{mosaic_clinic_visited}]]></variableExpression>
 	</variable>
 	<variable name="mosaic_clinic_notattended" class="java.lang.Number">
 		<variableExpression><![CDATA[$V{mosaic_clinic_total} - $V{mosaic_clinic_attended}]]></variableExpression>
@@ -77,10 +77,10 @@ GROUP BY mvf2.id
 		<variableExpression><![CDATA[new Float($V{mosaic_clinic_attended}.floatValue()/$V{mosaic_clinic_total}.floatValue())]]></variableExpression>
 	</variable>
 	<variable name="mosaic_counselling_total" class="java.lang.Number" calculation="Sum">
-		<variableExpression><![CDATA[$F{mosaic_counselling_referred}]]></variableExpression>
+		<variableExpression><![CDATA[$F{mosaic_counselling_referred} == null ? 0 : $F{mosaic_counselling_referred}]]></variableExpression>
 	</variable>
 	<variable name="mosaic_counselling_attended" class="java.lang.Number" calculation="Sum">
-		<variableExpression><![CDATA[$F{mosaic_counselling_visited}]]></variableExpression>
+		<variableExpression><![CDATA[$F{mosaic_counselling_visited} == null ? 0 : $F{mosaic_counselling_visited}]]></variableExpression>
 	</variable>
 	<variable name="mosaic_counselling_notattended" class="java.lang.Number">
 		<variableExpression><![CDATA[$V{mosaic_counselling_total} - $V{mosaic_counselling_attended}]]></variableExpression>
@@ -89,10 +89,10 @@ GROUP BY mvf2.id
 		<variableExpression><![CDATA[new Float($V{mosaic_counselling_attended}.floatValue()/$V{mosaic_counselling_total}.floatValue())]]></variableExpression>
 	</variable>
 	<variable name="hiv_test_hct_total" class="java.lang.Number" calculation="Sum">
-		<variableExpression><![CDATA[$F{hiv_test_hct_referred}]]></variableExpression>
+		<variableExpression><![CDATA[$F{hiv_test_hct_referred} == null ? 0 : $F{hiv_test_hct_referred}]]></variableExpression>
 	</variable>
 	<variable name="hiv_test_hct_attended" class="java.lang.Number" calculation="Sum">
-		<variableExpression><![CDATA[$F{hiv_test_hct_visited}]]></variableExpression>
+		<variableExpression><![CDATA[$F{hiv_test_hct_visited} == null ? 0 : $F{hiv_test_hct_visited}]]></variableExpression>
 	</variable>
 	<variable name="hiv_test_hct_notattended" class="java.lang.Number">
 		<variableExpression><![CDATA[$V{hiv_test_hct_total} - $V{hiv_test_hct_attended}]]></variableExpression>
@@ -101,10 +101,10 @@ GROUP BY mvf2.id
 		<variableExpression><![CDATA[new Float($V{hiv_test_hct_attended}.floatValue()/$V{hiv_test_hct_total}.floatValue())]]></variableExpression>
 	</variable>
 	<variable name="workshop_total" class="java.lang.Number" calculation="Sum">
-		<variableExpression><![CDATA[$F{workshop_referred}]]></variableExpression>
+		<variableExpression><![CDATA[$F{workshop_referred} == null ? 0 : $F{workshop_referred}]]></variableExpression>
 	</variable>
 	<variable name="workshop_attended" class="java.lang.Number" calculation="Sum">
-		<variableExpression><![CDATA[$F{workshop_visited}]]></variableExpression>
+		<variableExpression><![CDATA[$F{workshop_visited} == null ? 0 : $F{workshop_visited}]]></variableExpression>
 	</variable>
 	<variable name="workshop_notattended" class="java.lang.Number">
 		<variableExpression><![CDATA[$V{workshop_total} - $V{workshop_attended}]]></variableExpression>
@@ -113,10 +113,10 @@ GROUP BY mvf2.id
 		<variableExpression><![CDATA[new Float($V{workshop_attended}.floatValue()/$V{workshop_total}.floatValue())]]></variableExpression>
 	</variable>
 	<variable name="support_group_total" class="java.lang.Number" calculation="Sum">
-		<variableExpression><![CDATA[$F{support_group_referred}]]></variableExpression>
+		<variableExpression><![CDATA[$F{support_group_referred} == null ? 0 : $F{support_group_referred}]]></variableExpression>
 	</variable>
 	<variable name="support_group_attended" class="java.lang.Number" calculation="Sum">
-		<variableExpression><![CDATA[$F{support_group_visited}]]></variableExpression>
+		<variableExpression><![CDATA[$F{support_group_visited} == null ? 0 : $F{support_group_visited}]]></variableExpression>
 	</variable>
 	<variable name="support_group_notattended" class="java.lang.Number">
 		<variableExpression><![CDATA[$V{support_group_total} - $V{support_group_attended}]]></variableExpression>
@@ -125,10 +125,10 @@ GROUP BY mvf2.id
 		<variableExpression><![CDATA[new Float($V{support_group_attended}.floatValue()/$V{support_group_total}.floatValue())]]></variableExpression>
 	</variable>
 	<variable name="mencare_total" class="java.lang.Number" calculation="Sum">
-		<variableExpression><![CDATA[$F{mencare_referred}]]></variableExpression>
+		<variableExpression><![CDATA[$F{mencare_referred} == null ? 0 : $F{mencare_referred}]]></variableExpression>
 	</variable>
 	<variable name="mencare_attended" class="java.lang.Number" calculation="Sum">
-		<variableExpression><![CDATA[$F{mencare_visited}]]></variableExpression>
+		<variableExpression><![CDATA[$F{mencare_visited} == null ? 0 : $F{mencare_visited}]]></variableExpression>
 	</variable>
 	<variable name="mencare_notattended" class="java.lang.Number">
 		<variableExpression><![CDATA[$V{mencare_total} - $V{mencare_attended}]]></variableExpression>
@@ -489,7 +489,7 @@ GROUP BY mvf2.id
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{mosaic_clinic_notattended} == 0 ? "0 %" : ($V{mosaic_clinic_notattended} == null ? "0 %" : $V{mosaic_clinic_percentage} )]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{mosaic_clinic_notattended} == 0 ? "0.00 %" : ($V{mosaic_clinic_notattended} == null ? "0.00 %" : $V{mosaic_clinic_percentage} )]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="1" y="295" width="77" height="21" uuid="7f5507be-08a0-4227-abe4-a3a8a5afba29"/>
@@ -545,7 +545,7 @@ GROUP BY mvf2.id
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{mosaic_counselling_notattended} == 0 ? "0 %" : ($V{mosaic_counselling_notattended} == null ? "0 %" : $V{mosaic_counselling_percentage} )]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{mosaic_counselling_notattended} == 0 ? "0.00 %" : ($V{mosaic_counselling_notattended} == null ? "0.00 %" : $V{mosaic_counselling_percentage} )]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="155" y="206" width="77" height="47" uuid="d15a4934-f16d-40dc-a2af-01c664a64bed"/>
@@ -643,7 +643,7 @@ GROUP BY mvf2.id
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{support_group_notattended} == 0 ? "0 %" : ($V{support_group_notattended} == null ? "0 %" : $V{support_group_percentage} )]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{support_group_notattended} == 0 ? "0.00 %" : ($V{support_group_notattended} == null ? "0.00 %" : $V{support_group_percentage} )]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="78" y="206" width="77" height="47" uuid="ef014e4b-b949-489b-9add-cc400c431d86"/>
@@ -699,7 +699,7 @@ GROUP BY mvf2.id
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{workshop_notattended} == 0 ? "0 %" : ($V{workshop_notattended} == null ? "0 %" : $V{workshop_percentage} )]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{workshop_notattended} == 0 ? "0.00 %" : ($V{workshop_notattended} == null ? "0.00 %" : $V{workshop_percentage} )]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0;-###0" isBlankWhenNull="false">
 				<reportElement x="309" y="253" width="77" height="21" uuid="5a13406e-bd91-4e23-80ca-a4e6959ea646"/>
@@ -875,7 +875,7 @@ GROUP BY mvf2.id
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{hiv_test_hct_notattended} == 0 ? "0 %" : ($V{hiv_test_hct_notattended} == null ? "0 %" : $V{hiv_test_hct_percentage} )]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{hiv_test_hct_notattended} == 0 ? "0.00 %" : ($V{hiv_test_hct_notattended} == null ? "0.00 %" : $V{hiv_test_hct_percentage} )]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0;-###0">
 				<reportElement x="462" y="274" width="92" height="21" uuid="ac69889f-ced0-4cf4-b8d6-d1bc9209f989"/>
@@ -903,7 +903,7 @@ GROUP BY mvf2.id
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{mencare_notattended} == 0 ? "0 %" : ($V{mencare_notattended} == null ? "0 %" : $V{mencare_percentage} )]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{mencare_notattended} == 0 ? "0.00 %" : ($V{mencare_notattended} == null ? "0.00 %" : $V{mencare_percentage} )]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0;-###0" isBlankWhenNull="false">
 				<reportElement x="155" y="253" width="77" height="20" uuid="6aac571a-ab27-4a4e-8c71-facc13941b92"/>
