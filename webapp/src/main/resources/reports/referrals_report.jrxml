@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="referrals_report" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryNewPage="true" isSummaryWithPageHeaderAndFooter="true" uuid="a4645525-51e6-48a0-b118-6c27973dffcb">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="144"/>
+	<property name="ireport.y" value="400"/>
 	<template><![CDATA[$P{SUBREPORT_DIR} + "report_style_template.jrtx"]]></template>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
@@ -489,7 +489,7 @@ GROUP BY mvf2.id
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{mosaic_clinic_notattended} == 0 ? "0.00 %" : ($V{mosaic_clinic_notattended} == null ? "0.00 %" : $V{mosaic_clinic_percentage} )]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{mosaic_clinic_total} == 0 ? "0.00 %" : ($V{mosaic_clinic_total} == null ? "0.00 %" : $V{mosaic_clinic_percentage} )]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="1" y="295" width="77" height="21" uuid="7f5507be-08a0-4227-abe4-a3a8a5afba29"/>
@@ -545,7 +545,7 @@ GROUP BY mvf2.id
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{mosaic_counselling_notattended} == 0 ? "0.00 %" : ($V{mosaic_counselling_notattended} == null ? "0.00 %" : $V{mosaic_counselling_percentage} )]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{mosaic_counselling_total} == 0 ? "0.00 %" : ($V{mosaic_counselling_total} == null ? "0.00 %" : $V{mosaic_counselling_percentage} )]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="155" y="206" width="77" height="47" uuid="d15a4934-f16d-40dc-a2af-01c664a64bed"/>
@@ -643,7 +643,7 @@ GROUP BY mvf2.id
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{support_group_notattended} == 0 ? "0.00 %" : ($V{support_group_notattended} == null ? "0.00 %" : $V{support_group_percentage} )]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{support_group_total} == 0 ? "0.00 %" : ($V{support_group_total} == null ? "0.00 %" : $V{support_group_percentage} )]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="78" y="206" width="77" height="47" uuid="ef014e4b-b949-489b-9add-cc400c431d86"/>
@@ -699,7 +699,7 @@ GROUP BY mvf2.id
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{workshop_notattended} == 0 ? "0.00 %" : ($V{workshop_notattended} == null ? "0.00 %" : $V{workshop_percentage} )]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{workshop_total} == 0 ? "0.00 %" : ($V{workshop_total} == null ? "0.00 %" : $V{workshop_percentage} )]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0;-###0" isBlankWhenNull="false">
 				<reportElement x="309" y="253" width="77" height="21" uuid="5a13406e-bd91-4e23-80ca-a4e6959ea646"/>
@@ -875,7 +875,7 @@ GROUP BY mvf2.id
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{hiv_test_hct_notattended} == 0 ? "0.00 %" : ($V{hiv_test_hct_notattended} == null ? "0.00 %" : $V{hiv_test_hct_percentage} )]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{hiv_test_hct_total} == 0 ? "0.00 %" : ($V{hiv_test_hct_total} == null ? "0.00 %" : $V{hiv_test_hct_percentage} )]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0;-###0">
 				<reportElement x="462" y="274" width="92" height="21" uuid="ac69889f-ced0-4cf4-b8d6-d1bc9209f989"/>
@@ -903,7 +903,7 @@ GROUP BY mvf2.id
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{mencare_notattended} == 0 ? "0.00 %" : ($V{mencare_notattended} == null ? "0.00 %" : $V{mencare_percentage} )]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{mencare_total} == 0 ? "0.00 %" : ($V{mencare_total} == null ? "0.00 %" : $V{mencare_percentage} )]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0;-###0" isBlankWhenNull="false">
 				<reportElement x="155" y="253" width="77" height="20" uuid="6aac571a-ab27-4a4e-8c71-facc13941b92"/>
