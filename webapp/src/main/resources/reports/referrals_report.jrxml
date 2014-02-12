@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="referrals_report" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryNewPage="true" isSummaryWithPageHeaderAndFooter="true" uuid="a4645525-51e6-48a0-b118-6c27973dffcb">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="400"/>
+	<property name="ireport.y" value="144"/>
 	<template><![CDATA[$P{SUBREPORT_DIR} + "report_style_template.jrtx"]]></template>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
@@ -139,15 +139,15 @@ GROUP BY mvf2.id
 	<title>
 		<band height="130" splitType="Stretch">
 			<staticText>
-				<reportElement style="report_title" mode="Transparent" x="1" y="84" width="555" height="46" uuid="7a9ac474-6007-4e2c-9dd8-9de774ff5777"/>
+				<reportElement style="report_title" mode="Transparent" x="1" y="84" width="555" height="46" forecolor="#653165" uuid="7a9ac474-6007-4e2c-9dd8-9de774ff5777"/>
 				<textElement verticalAlignment="Middle">
 					<font size="14"/>
 				</textElement>
 				<text><![CDATA[MOSAIC: Summary report of attended Programs]]></text>
 			</staticText>
 			<image>
-				<reportElement stretchType="RelativeToBandHeight" x="1" y="1" width="82" height="82" uuid="304f73ac-f360-4d99-8c9e-a27232294347"/>
-				<imageExpression><![CDATA[$P{SUBREPORT_DIR} + "mosaic-logo.jpg"]]></imageExpression>
+				<reportElement stretchType="RelativeToBandHeight" x="1" y="1" width="214" height="82" uuid="304f73ac-f360-4d99-8c9e-a27232294347"/>
+				<imageExpression><![CDATA[$P{SUBREPORT_DIR} + "mosaic-logo-new.png"]]></imageExpression>
 			</image>
 			<textField pattern="EEE, d MMM yyyy HH:mm">
 				<reportElement x="412" y="1" width="141" height="20" uuid="a27ebd32-fc43-4cc0-81b2-15182a234bdd"/>
@@ -206,7 +206,7 @@ GROUP BY mvf2.id
 		<band height="47" splitType="Stretch">
 			<staticText>
 				<reportElement x="1" y="0" width="66" height="47" uuid="aa34fa83-3fbf-407f-a501-167fc3878219"/>
-				<box topPadding="5" leftPadding="5">
+				<box topPadding="5" leftPadding="5" bottomPadding="5" rightPadding="5">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.0"/>
@@ -220,7 +220,7 @@ GROUP BY mvf2.id
 			</staticText>
 			<staticText>
 				<reportElement x="188" y="0" width="77" height="47" uuid="dbb4b2a9-61da-4919-842c-82a9b2234e1e"/>
-				<box topPadding="5" leftPadding="5">
+				<box topPadding="5" leftPadding="5" bottomPadding="5" rightPadding="5">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -234,7 +234,7 @@ GROUP BY mvf2.id
 			</staticText>
 			<staticText>
 				<reportElement x="265" y="0" width="66" height="47" uuid="c33c9dfb-049c-4f18-925b-65793ceaa73b"/>
-				<box topPadding="5" leftPadding="2">
+				<box topPadding="5" leftPadding="5" bottomPadding="5" rightPadding="5">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.0"/>
@@ -248,7 +248,7 @@ GROUP BY mvf2.id
 			</staticText>
 			<staticText>
 				<reportElement x="128" y="0" width="60" height="47" uuid="11dd0312-27d8-4ea3-b35c-7c2372ad52f0"/>
-				<box topPadding="5" leftPadding="5">
+				<box topPadding="5" leftPadding="5" bottomPadding="5" rightPadding="5">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -262,7 +262,7 @@ GROUP BY mvf2.id
 			</staticText>
 			<staticText>
 				<reportElement x="331" y="0" width="66" height="47" uuid="c02a0fce-e305-4152-b598-0c60cce82b22"/>
-				<box topPadding="5" leftPadding="5">
+				<box topPadding="5" leftPadding="5" bottomPadding="5" rightPadding="5">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.0"/>
@@ -276,7 +276,7 @@ GROUP BY mvf2.id
 			</staticText>
 			<staticText>
 				<reportElement x="67" y="0" width="61" height="47" uuid="c9485076-81b2-481f-92a2-e01437900775"/>
-				<box topPadding="5" leftPadding="5">
+				<box topPadding="5" leftPadding="5" bottomPadding="5" rightPadding="5">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.0"/>
@@ -290,7 +290,7 @@ GROUP BY mvf2.id
 			</staticText>
 			<staticText>
 				<reportElement x="397" y="0" width="74" height="47" uuid="df02afbb-cc0d-4417-8882-453eaf654816"/>
-				<box topPadding="5" leftPadding="5">
+				<box topPadding="5" leftPadding="5" bottomPadding="5" rightPadding="5">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -304,7 +304,7 @@ GROUP BY mvf2.id
 			</staticText>
 			<staticText>
 				<reportElement x="471" y="0" width="83" height="47" uuid="0eee1318-6da4-4c96-8c70-6a9de47f9489"/>
-				<box topPadding="5" leftPadding="5">
+				<box topPadding="5" leftPadding="5" bottomPadding="5" rightPadding="5">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -521,7 +521,7 @@ GROUP BY mvf2.id
 			</staticText>
 			<staticText>
 				<reportElement x="232" y="206" width="77" height="47" uuid="95a5aba2-583a-4e23-a8ef-ab4a9a3fd7f4"/>
-				<box topPadding="5" leftPadding="5">
+				<box topPadding="5" leftPadding="5" bottomPadding="5" rightPadding="5">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.0"/>
@@ -531,7 +531,7 @@ GROUP BY mvf2.id
 				<textElement textAlignment="Center">
 					<font size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[HIV Test Total]]></text>
+				<text><![CDATA[HIV Test / Hct]]></text>
 			</staticText>
 			<textField pattern="#,##0.00 %" isBlankWhenNull="false">
 				<reportElement x="155" y="295" width="77" height="21" uuid="1316381e-19dd-4e6b-bbb9-c58f5e94a26b"/>
@@ -549,7 +549,7 @@ GROUP BY mvf2.id
 			</textField>
 			<staticText>
 				<reportElement x="155" y="206" width="77" height="47" uuid="d15a4934-f16d-40dc-a2af-01c664a64bed"/>
-				<box topPadding="5" leftPadding="5">
+				<box topPadding="5" leftPadding="5" bottomPadding="5" rightPadding="5">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.0"/>
@@ -559,11 +559,11 @@ GROUP BY mvf2.id
 				<textElement textAlignment="Center">
 					<font size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Mosaic Counselling Total]]></text>
+				<text><![CDATA[Mosaic Counselling]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="309" y="206" width="77" height="47" uuid="a6e1a4d6-c4e6-462c-b466-eff63cca0cad"/>
-				<box topPadding="5" leftPadding="2">
+				<box topPadding="5" leftPadding="5" bottomPadding="5" rightPadding="5">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.0"/>
@@ -573,7 +573,7 @@ GROUP BY mvf2.id
 				<textElement textAlignment="Center">
 					<font size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Workshop Total]]></text>
+				<text><![CDATA[Workshop]]></text>
 			</staticText>
 			<textField pattern="###0;-###0" isBlankWhenNull="false">
 				<reportElement x="386" y="274" width="77" height="21" uuid="bae9139c-5e7d-405f-8334-ca0d3513ba0f"/>
@@ -647,7 +647,7 @@ GROUP BY mvf2.id
 			</textField>
 			<staticText>
 				<reportElement x="78" y="206" width="77" height="47" uuid="ef014e4b-b949-489b-9add-cc400c431d86"/>
-				<box topPadding="5" leftPadding="5">
+				<box topPadding="5" leftPadding="5" bottomPadding="5" rightPadding="5">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.0"/>
@@ -657,11 +657,11 @@ GROUP BY mvf2.id
 				<textElement textAlignment="Center">
 					<font size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Mosaic Clinic Total]]></text>
+				<text><![CDATA[Mosaic Clinic]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="1" y="206" width="77" height="47" uuid="8ee3e2e5-8aa2-4e0e-8c8d-867e12860dca"/>
-				<box topPadding="5" leftPadding="5">
+				<box topPadding="5" leftPadding="5" bottomPadding="5" rightPadding="5">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.0"/>
@@ -773,7 +773,7 @@ GROUP BY mvf2.id
 			</textField>
 			<staticText>
 				<reportElement x="386" y="206" width="77" height="47" uuid="7075ee28-ffb8-4af0-b6b5-feea362521e6"/>
-				<box topPadding="5" leftPadding="5">
+				<box topPadding="5" leftPadding="5" bottomPadding="5" rightPadding="5">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -783,18 +783,18 @@ GROUP BY mvf2.id
 				<textElement textAlignment="Center">
 					<font size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Support Group Total]]></text>
+				<text><![CDATA[Support Group]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="report_title" mode="Transparent" x="1" y="86" width="555" height="46" uuid="853bc320-2f2d-48e7-bae9-8066ed91bc48"/>
+				<reportElement style="report_title" mode="Transparent" x="1" y="86" width="555" height="46" forecolor="#653165" uuid="853bc320-2f2d-48e7-bae9-8066ed91bc48"/>
 				<textElement verticalAlignment="Middle">
 					<font size="14"/>
 				</textElement>
 				<text><![CDATA[MOSAIC: Summary report of attended Programs]]></text>
 			</staticText>
 			<image>
-				<reportElement stretchType="RelativeToBandHeight" x="1" y="1" width="82" height="82" uuid="2253dcfd-9a63-4dd5-8a21-8be20295cc00"/>
-				<imageExpression><![CDATA[$P{SUBREPORT_DIR} + "mosaic-logo.jpg"]]></imageExpression>
+				<reportElement stretchType="RelativeToBandHeight" x="1" y="1" width="214" height="82" uuid="2253dcfd-9a63-4dd5-8a21-8be20295cc00"/>
+				<imageExpression><![CDATA[$P{SUBREPORT_DIR} + "mosaic-logo-new.png"]]></imageExpression>
 			</image>
 			<textField pattern="EEE, d MMM yyyy HH:mm">
 				<reportElement x="412" y="4" width="141" height="20" uuid="a9224eeb-8f69-41b5-bad5-24cdf56c3409"/>
@@ -837,7 +837,7 @@ GROUP BY mvf2.id
 			</textField>
 			<staticText>
 				<reportElement x="462" y="206" width="92" height="47" uuid="4af0f0cd-0e3f-4ea0-9d45-acaa1de398f2"/>
-				<box>
+				<box topPadding="5" leftPadding="5" bottomPadding="5" rightPadding="5">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -847,7 +847,7 @@ GROUP BY mvf2.id
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[Mencare+ Total]]></text>
+				<text><![CDATA[Mencare+]]></text>
 			</staticText>
 			<textField pattern="###0;-###0">
 				<reportElement x="462" y="253" width="92" height="21" uuid="d8f30a1b-f52b-457a-82b9-7c0a606358a3"/>
