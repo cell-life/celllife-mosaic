@@ -44,7 +44,7 @@ SELECT mvf2.PatRefCode, mvf2.refBy as referredBy, mvf2.IntReferral as visitIntRe
 FROM mosaic_mosaic_visit_form_v2 mvf2
   LEFT JOIN mosaic_mosaic_referral_form_v2 mrf2 on
     (((mrf2.IdNum = mvf2.IdNum) or (mrf2.PassNum = mvf2.PassNum))
-    or ((mrf2.IdNum = null or mvf2.IdNum = null) and (mrf2.PassNum = null or mvf2.PassNum = null) and (mrf2.PatRefCode = mvf2.PatRefCode)))
+    or ((mrf2.IdNum is null or mvf2.IdNum is null) and (mrf2.PassNum is null or mvf2.PassNum is null) and (mrf2.PatRefCode = mvf2.PatRefCode)))
 WHERE
 mvf2.date between $P{start_date} and $P{end_date}
 GROUP BY mvf2.id
