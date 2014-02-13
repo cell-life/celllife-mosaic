@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="feedback_mencare_sub_report" language="groovy" pageWidth="555" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="feedback_mencare_sub_report" language="groovy" pageWidth="555" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="ab5d1b93-226d-42e0-aa38-a94b0ecf5269">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -17,19 +17,19 @@ FROM
    FROM
    (
   -- Mencare+ --
-  (SELECT id, 'Sexual Violence' as Program, 'Counselling' as Service, UsefulInfo, Impact, OverallRating
+  (SELECT id, 'Mencare' as Program, 'Counselling' as Service, UsefulInfo, Impact, OverallRating
 	 FROM mosaic_mosaic_feedback_form_v2
-	 WHERE ProgProvided = 'mencare_prog' and CourtServ like '%men_counselling%' and date between '2013-01-01' and $P{end_date}
+	 WHERE ProgProvided = 'mencare_prog' and MencServ like '%men_counselling%' and date between '2013-01-01' and $P{end_date}
   )
   UNION ALL
-  (SELECT id, 'Sexual Violence' as Program, 'Group education with young men on SRHR, gender equality and caregiving' as Service, UsefulInfo, Impact, OverallRating
+  (SELECT id, 'Mencare' as Program, 'Group education with young men on SRHR, gender equality and caregiving' as Service, UsefulInfo, Impact, OverallRating
 	 FROM mosaic_mosaic_feedback_form_v2
-	 WHERE ProgProvided = 'mencare_prog' and CourtServ like '%group_education%' and date between '2013-01-01' and $P{end_date}
+	 WHERE ProgProvided = 'mencare_prog' and MencServ like '%group_education%' and date between '2013-01-01' and $P{end_date}
   )
   UNION ALL
-  (SELECT id, 'Sexual Violence' as Program, 'Community campaigns/awareness on mencare+' as Service, UsefulInfo, Impact, OverallRating
+  (SELECT id, 'Mencare' as Program, 'Community campaigns/awareness on mencare+' as Service, UsefulInfo, Impact, OverallRating
 	 FROM mosaic_mosaic_feedback_form_v2
-	 WHERE ProgProvided = 'mencare_prog' and CourtServ like '%comm_campaigns%' and date between '2013-01-01' and $P{end_date}
+	 WHERE ProgProvided = 'mencare_prog' and MencServ like '%comm_campaigns%' and date between '2013-01-01' and $P{end_date}
   )
  ) AS feedback_text
 ) AS feedback
@@ -59,9 +59,8 @@ GROUP BY Program, Service;]]>
 	<title>
 		<band height="33" splitType="Stretch">
 			<staticText>
-				<reportElement x="11" y="10" width="106" height="20"/>
+				<reportElement x="11" y="10" width="106" height="20" uuid="86814efe-457a-422f-a32c-75560c435056"/>
 				<box topPadding="5" leftPadding="0"/>
-				<textElement/>
 				<text><![CDATA[Mencare+]]></text>
 			</staticText>
 		</band>
@@ -72,7 +71,7 @@ GROUP BY Program, Service;]]>
 	<columnHeader>
 		<band height="15" splitType="Stretch">
 			<staticText>
-				<reportElement x="11" y="0" width="189" height="15"/>
+				<reportElement x="11" y="0" width="189" height="15" uuid="8fe21ffd-8729-44ae-8db0-ffb5050f6c64"/>
 				<box topPadding="2" leftPadding="5">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -84,7 +83,7 @@ GROUP BY Program, Service;]]>
 				<text><![CDATA[Service]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="455" y="0" width="85" height="15"/>
+				<reportElement x="455" y="0" width="85" height="15" uuid="8164b40c-f015-4195-a9cc-968dc8cefeb1"/>
 				<box topPadding="2" leftPadding="5">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -96,7 +95,7 @@ GROUP BY Program, Service;]]>
 				<text><![CDATA[Total average]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="200" y="0" width="85" height="15"/>
+				<reportElement x="200" y="0" width="85" height="15" uuid="f010013d-94aa-4419-9a60-8e9d31e4dc3a"/>
 				<box topPadding="2" leftPadding="5">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -108,7 +107,7 @@ GROUP BY Program, Service;]]>
 				<text><![CDATA[Useful information]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="285" y="0" width="85" height="15"/>
+				<reportElement x="285" y="0" width="85" height="15" uuid="0d4176c2-a807-40b7-b128-8ab325e6a5ed"/>
 				<box topPadding="2" leftPadding="5">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -120,7 +119,7 @@ GROUP BY Program, Service;]]>
 				<text><![CDATA[Intervention impact]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="370" y="0" width="85" height="15"/>
+				<reportElement x="370" y="0" width="85" height="15" uuid="7b477419-3159-4923-8f87-16f46a018c18"/>
 				<box topPadding="2" leftPadding="5">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -136,7 +135,7 @@ GROUP BY Program, Service;]]>
 	<detail>
 		<band height="25" splitType="Stretch">
 			<textField pattern="###0;-###0" isBlankWhenNull="true">
-				<reportElement x="11" y="0" width="189" height="25"/>
+				<reportElement x="11" y="0" width="189" height="25" uuid="24a7ba42-8cdc-411d-9611-a8ab8910fdd4"/>
 				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -150,7 +149,7 @@ GROUP BY Program, Service;]]>
 				<textFieldExpression><![CDATA[$F{Service}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0.0;-###0.0" isBlankWhenNull="true">
-				<reportElement x="200" y="0" width="85" height="25"/>
+				<reportElement x="200" y="0" width="85" height="25" uuid="65fc21cd-dfc1-409d-93e5-7e6dc88654f7"/>
 				<box leftPadding="0">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -164,7 +163,7 @@ GROUP BY Program, Service;]]>
 				<textFieldExpression><![CDATA[$F{UsefulInfo}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0.0;-###0.0" isBlankWhenNull="true">
-				<reportElement x="285" y="0" width="85" height="25"/>
+				<reportElement x="285" y="0" width="85" height="25" uuid="667c8902-ff30-4eb6-ae6f-cbca351356ee"/>
 				<box leftPadding="0">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -178,7 +177,7 @@ GROUP BY Program, Service;]]>
 				<textFieldExpression><![CDATA[$F{Impact}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0.0;-###0.0" isBlankWhenNull="true">
-				<reportElement x="370" y="0" width="85" height="25"/>
+				<reportElement x="370" y="0" width="85" height="25" uuid="a9390d2a-d1fa-4dad-8719-1abe3a2b9b2b"/>
 				<box leftPadding="0">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -192,7 +191,7 @@ GROUP BY Program, Service;]]>
 				<textFieldExpression><![CDATA[$F{OverallRating}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0.0;-###0.0" isBlankWhenNull="true">
-				<reportElement x="455" y="0" width="85" height="25"/>
+				<reportElement x="455" y="0" width="85" height="25" uuid="0c3ed366-3007-4a88-b73d-35b62b77419b"/>
 				<box leftPadding="0">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -216,7 +215,7 @@ GROUP BY Program, Service;]]>
 	<summary>
 		<band height="15" splitType="Stretch">
 			<textField pattern="###0.0;-###0.0" isBlankWhenNull="true">
-				<reportElement x="200" y="0" width="85" height="15"/>
+				<reportElement x="200" y="0" width="85" height="15" uuid="5c780671-4b07-4ae5-a070-54d551adc37e"/>
 				<box leftPadding="0">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -230,7 +229,7 @@ GROUP BY Program, Service;]]>
 				<textFieldExpression><![CDATA[$V{avg_UsefulInfo}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0.0;-###0.0" isBlankWhenNull="true">
-				<reportElement x="285" y="0" width="85" height="15"/>
+				<reportElement x="285" y="0" width="85" height="15" uuid="fc4d9386-5869-4452-a426-9aa4482d07f6"/>
 				<box leftPadding="0">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -244,7 +243,7 @@ GROUP BY Program, Service;]]>
 				<textFieldExpression><![CDATA[$V{avg_Impact}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0.0;-###0.0" isBlankWhenNull="true">
-				<reportElement x="370" y="0" width="85" height="15"/>
+				<reportElement x="370" y="0" width="85" height="15" uuid="a00b02b3-e297-4989-b302-d64292db352f"/>
 				<box leftPadding="0">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -258,7 +257,7 @@ GROUP BY Program, Service;]]>
 				<textFieldExpression><![CDATA[$V{avg_OverallRating}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0.0;-###0.0" isBlankWhenNull="true">
-				<reportElement x="455" y="0" width="85" height="15"/>
+				<reportElement x="455" y="0" width="85" height="15" uuid="d8048f4e-5161-46c1-bad4-aa501529fa6a"/>
 				<box leftPadding="0">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -272,7 +271,7 @@ GROUP BY Program, Service;]]>
 				<textFieldExpression><![CDATA[$V{avg_AvgRating}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="11" y="0" width="189" height="15"/>
+				<reportElement x="11" y="0" width="189" height="15" uuid="f5fff276-39f8-4ce6-928b-95727762f581"/>
 				<box topPadding="0" leftPadding="5" rightPadding="5"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="true"/>

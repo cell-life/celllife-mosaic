@@ -19,7 +19,7 @@ FROM
   -- Sexual and reproductive health --
   (SELECT id, 'Sexual and reproductive health' as Program, 'HIV Counselling and Testing' as Service, UsefulInfo, Impact, OverallRating
 	 FROM mosaic_mosaic_feedback_form_v2
-	 WHERE ProgProvided = 'SRH_prog' and CourtServ like '%SexualServHct%' and date between '2013-01-01' and $P{end_date}
+	 WHERE ProgProvided = 'SRH_prog' and SexualServ like '%SexualServHct%' and date between '2013-01-01' and $P{end_date}
   )
  ) AS feedback_text
 ) AS feedback

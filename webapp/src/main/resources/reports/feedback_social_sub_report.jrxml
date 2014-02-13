@@ -19,32 +19,32 @@ FROM
   -- social services --
   (SELECT id, 'Social Services' as Program, 'Public Awareness - Gender Based Violence/HIV/Sexual Reproductive Health & Rights' as Service, UsefulInfo, Impact, OverallRating
 	 FROM mosaic_mosaic_feedback_form_v2
-	 WHERE ProgProvided = 'social_serv_prog' and CourtServ like '%public_awareness%' and date between $P{start_date} and $P{end_date}
+	 WHERE ProgProvided = 'social_serv_prog' and SocialServ like '%public_awareness%' and date between $P{start_date} and $P{end_date}
   )
   UNION ALL
   (SELECT id, 'Social Services' as Program, 'Individual, Couple and Family counselling for victims of Domestic Violence and their families' as Service, UsefulInfo, Impact, OverallRating
 	 FROM mosaic_mosaic_feedback_form_v2
-	 WHERE ProgProvided = 'social_serv_prog' and CourtServ like '%family_couns_DV%' and date between $P{start_date} and $P{end_date}
+	 WHERE ProgProvided = 'social_serv_prog' and SocialServ like '%family_couns_DV%' and date between $P{start_date} and $P{end_date}
   )
   UNION ALL
   (SELECT id, 'Social Services' as Program, 'Educational workshops' as Service, UsefulInfo, Impact, OverallRating
 	 FROM mosaic_mosaic_feedback_form_v2
-	 WHERE ProgProvided = 'social_serv_prog' and CourtServ like '%educational_WS%' and date between $P{start_date} and $P{end_date}
+	 WHERE ProgProvided = 'social_serv_prog' and SocialServ like '%educational_WS%' and date between $P{start_date} and $P{end_date}
   )
   UNION ALL
   (SELECT id, 'Social Services' as Program, 'Educational Support Groups' as Service, UsefulInfo, Impact, OverallRating
 	 FROM mosaic_mosaic_feedback_form_v2
-	 WHERE ProgProvided = 'social_serv_prog' and CourtServ like '%educational_SG%' and date between $P{start_date} and $P{end_date}
+	 WHERE ProgProvided = 'social_serv_prog' and SocialServ like '%educational_SG%' and date between $P{start_date} and $P{end_date}
   )
   UNION ALL
   (SELECT id, 'Social Services' as Program, 'Community Outreach Events' as Service, UsefulInfo, Impact, OverallRating
 	 FROM mosaic_mosaic_feedback_form_v2
-	 WHERE ProgProvided = 'social_serv_prog' and CourtServ like '%comm_outreach_events%' and date between $P{start_date} and $P{end_date}
+	 WHERE ProgProvided = 'social_serv_prog' and SocialServ like '%comm_outreach_events%' and date between $P{start_date} and $P{end_date}
   )
   UNION ALL
   (SELECT id, 'Social Services' as Program, 'Advocacy and Lobbying' as Service, UsefulInfo, Impact, OverallRating
 	 FROM mosaic_mosaic_feedback_form_v2
-	 WHERE ProgProvided = 'social_serv_prog' and CourtServ like '%advocacy_and_lobbying%' and date between $P{start_date} and $P{end_date}
+	 WHERE ProgProvided = 'social_serv_prog' and SocialServ like '%advocacy_and_lobbying%' and date between $P{start_date} and $P{end_date}
   )
  ) AS feedback_text
 ) AS feedback
