@@ -573,11 +573,6 @@
             <groupId>org.celllife.report</groupId>
             <artifactId>celllife-report-reporting</artifactId>
         </dependency>
-        
-        <dependency>
-            <groupId>org.celllife.report</groupId>
-            <artifactId>celllife-report-pconfig</artifactId>
-        </dependency>
 
     </dependencies>
 
