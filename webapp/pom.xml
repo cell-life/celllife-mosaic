@@ -6,12 +6,12 @@
     <parent>
         <groupId>org.celllife.mosaic</groupId>
         <artifactId>celllife-mosaic-parent</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.1-SNAPSHOT</version>
     </parent>
 
     <groupId>org.celllife.mosaic</groupId>
     <artifactId>celllife-mosaic-webapp</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <name>${artifactId}</name>
