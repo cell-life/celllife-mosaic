@@ -201,8 +201,8 @@ WHERE
 				<text><![CDATA[MOSAIC: Summary report of people visited per Program & Service]]></text>
 			</staticText>
 			<image>
-				<reportElement stretchType="RelativeToBandHeight" x="1" y="1" width="82" height="82"/>
-				<imageExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "mosaic-logo.jpg"]]></imageExpression>
+				<reportElement stretchType="RelativeToBandHeight" x="1" y="1" width="298" height="82"/>
+				<imageExpression><![CDATA[$P{SUBREPORT_DIR} + "mosaic-logo-new.png"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="299" y="1" width="114" height="20"/>
