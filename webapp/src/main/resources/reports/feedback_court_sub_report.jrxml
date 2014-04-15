@@ -18,32 +18,32 @@ FROM
    (
   -- court services --
   (SELECT id, 'Court Support' as Program, 'Containment Counselling' as Service, UsefulInfo, Impact, OverallRating
-	 FROM mosaic_feedback_form_v1
+	 FROM mosaic_mosaic_feedback_form_v2
 	 WHERE ProgProvided = 'court_sup_prog' and CourtServ like '%cont_counselling%' and date between $P{start_date} and $P{end_date}
   )
   UNION ALL
   (SELECT id, 'Court Support' as Program, 'Education and information on domestic violence and abuse' as Service, UsefulInfo, Impact, OverallRating
-	 FROM mosaic_feedback_form_v1
+	 FROM mosaic_mosaic_feedback_form_v2
 	 WHERE ProgProvided = 'court_sup_prog' and CourtServ like '%education_DVA%' and date between $P{start_date} and $P{end_date}
   )
   UNION ALL
   (SELECT id, 'Court Support' as Program, 'Information about Court Processes and Procedures' as Service, UsefulInfo, Impact, OverallRating
-	 FROM mosaic_feedback_form_v1
+	 FROM mosaic_mosaic_feedback_form_v2
 	 WHERE ProgProvided = 'court_sup_prog' and CourtServ like '%info_court_proc%' and date between $P{start_date} and $P{end_date}
   )
   UNION ALL
   (SELECT id, 'Court Support' as Program, 'Referrals to other Service Providers as needed' as Service, UsefulInfo, Impact, OverallRating
-	 FROM mosaic_feedback_form_v1
+	 FROM mosaic_mosaic_feedback_form_v2
 	 WHERE ProgProvided = 'court_sup_prog' and CourtServ like '%referrals_SP%' and date between $P{start_date} and $P{end_date}
   )
   UNION ALL
   (SELECT id, 'Court Support' as Program, 'Information on Sexual Reproductive Health' as Service, UsefulInfo, Impact, OverallRating
-	 FROM mosaic_feedback_form_v1
+	 FROM mosaic_mosaic_feedback_form_v2
 	 WHERE ProgProvided = 'court_sup_prog' and CourtServ like '%info_SRH%' and date between $P{start_date} and $P{end_date}
   )
   UNION ALL
   (SELECT id, 'Court Support' as Program, 'Information on HIV and where to be tested' as Service, UsefulInfo, Impact, OverallRating
-	 FROM mosaic_feedback_form_v1
+	 FROM mosaic_mosaic_feedback_form_v2
 	 WHERE ProgProvided = 'court_sup_prog' and CourtServ like '%info_HIV_test%' and date between $P{start_date} and $P{end_date}
   )
  ) AS feedback_text
